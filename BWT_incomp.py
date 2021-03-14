@@ -30,11 +30,11 @@ class BWT:
         res = ""
         for l in m:  # l toma cada uma das strings de sequencias dentro da lista
             res += l[-1]  # e concatena-se o ultimo simbolo de cada sequencia nessa lista em res
-#        if buildsufarray:
-#            self.sa = []
-#            for i in range(len(ls)):
-#                stpos = ls[i].index("$")
-#                self.sa.append(len(text)-stpos-1)
+        if buildsufarray:  # contruir um array de sufixos ao mesmo tempo
+            self.sa = []  # vai guardar na variável sa
+            for i in range(len(m)):  # o iterador toma todos os valores num range do tamanho da lista que contem todas as sequencias
+                stpos = m[i].index("$")  # em cada uma dessas sequencias vê em que indice aparece o simbolo "$"
+                self.sa.append(len(text)-stpos-1)  # e adiciona a posição a contar do fim da sequencia orifinal
         return res    
 
 
@@ -100,8 +100,12 @@ class BWT:
 
     def bw_matching_pos(self, patt):
         res = []
-        #...
+        match = self.bw_matching(patt)
+        for m in match:
+            res.append(self.sa[m])
+        res.sort()
         return res
+
 
 # auxiliary
 
