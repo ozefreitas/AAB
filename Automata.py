@@ -1,6 +1,6 @@
 class Automata:
 
-    def __init__(self, alphabet, pattern):
+    def __init__(self, alphabet, pattern):  # classe inicializadora
         self.numstates = len(pattern) + 1
         self.alphabet = alphabet
         self.transitionTable = {}
