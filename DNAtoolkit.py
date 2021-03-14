@@ -1,10 +1,9 @@
 # import collections
 from structures import *
 
-
-def validate_seq(dna_seq):
-    """Valida se a sequencia inserida é de DNA ou não"""
-    seq = dna_seq.upper()
+def validate_seq(seq):
+    """Valida se a sequencia inserida é de DNA ou RNA"""
+    seq = seq.upper()
     for nuc in seq:
         if nuc not in DNA_Nucleotidos:
             return False
@@ -39,7 +38,7 @@ def reverse_complement(seq):
     return seq1.replace("a", "T").replace("t", "A").replace("c", "G").replace("g", "C")
 
 
-# Com lista por compreensão
+    # Com lista por compreensão
 def reverse_complement_2(seq):
     return "".join([DNA_reverse_complement[nuc] for nuc in seq])[::-1]
     # mapping = str.maketrans("ATGC", "TACG")
@@ -117,6 +116,7 @@ def motifs_position(seq, motif):
         return " ".join(pos)
 
 
+    
 def open_reading_frames(seq, seq_type="RNA"):
     if seq_type == "RNA":
         orfs = []
