@@ -45,10 +45,10 @@ class SuffixTree:
         node = 0
         for pos in range(len(pattern)):
             if pattern[pos] in self.nodes[node][1].keys():
-                node = self.nodes[node][1][pattern[pos]]
+                node = self.nodes[node][1][pattern[pos]]  # o value do dicionario "interno" diz para qual no se deve ir a seguir para continuarmos a ver o sufixo
             else:
                 return None
-        return self.get_leafes_below(node)  # sse encontrar um match, corre a funçar a baixo para ver qual a posição inicial do padrao na sequencia, que é dada pelas folhas
+        return self.get_leafes_below(node)  # se encontrar um match, corre a funçar a baixo para ver qual a posição inicial do padrao na sequencia, que é dada pelas folhas
         
 
     def get_leafes_below(self, node):
@@ -60,6 +60,31 @@ class SuffixTree:
                 newnode = self.nodes[node][1][k]  # vai percorrer os values de k dentro das keys node
                 leafes = self.get_leafes_below(newnode)  # e vai correr novamente esta função para esse value, até encontrar um valor negativo, que representa o $
                 res.extend(leafes)
+        return res
+
+
+    def nodes_below(self, node):
+        # enquanto nao encontrar um dicionário "interno" com apenas um elemento e esse elemento seja $; quando encontrar, para
+        res = []
+        t = 0
+        if self.nodes[node][0] < 0:
+            while t < len(self.nodes):  # dar uma folga
+                for k in self.nodes[node+t][1].keys():
+                    res.append(k)
+                    if k == "$" and len(self.nodes[node+t][1]) == 1:  # se essa key for igual a $ e estiver sozinha nesse dicionario do no a analisar, quer dizer que chegamos à folha
+                        return res  # e pode-se dar return à lista 
+                t += 1  
+            return res 
+        else:
+            return "That's a leaf!"
+
+
+    def matches_prefix(self, prefix):
+        res = [prefix] # primeiro elemento será sempre o próprio prefixo
+        st = ""  # string para, de cada vez que se avança o nó e se ve qual o elemento seguinte, concatena-se esse elemento para, em cada adição, adicinar à lista
+        pos = self.find_pattern(prefix)  # pos será uma lista com os indices onde o padrão se inicia na sequencia usada para construir a arvore
+        
+        res.append(st)
         return res
 
 
