@@ -91,9 +91,11 @@ class BWT:
                     bottomIndex = bottom - lmat[::-1].index(symbol)
                     top = lf[topIndex]
                     bottom = lf[bottomIndex]
-                else: flag = False
+                else: 
+                    flag = False
             else: 
-                for i in range(top, bottom+1): res.append(i)
+                for i in range(top, bottom+1): 
+                    res.append(i)
                 flag = False            
         return res        
 

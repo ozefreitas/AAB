@@ -5,6 +5,7 @@ class SuffixTree:
     def __init__(self):
         self.nodes = { 0:(-1,{}) } # root node, se for -1 representa um nó, caso contrário é uma folha
         self.num = 0
+        self.sequence = ""
 
 
     def print_tree(self):
@@ -14,7 +15,7 @@ class SuffixTree:
             else:
                 print (k, ":", self.nodes[k][0])
 
-        
+
     def add_node(self, origin, symbol, leafnum = -1): # mesmo efeito que na trie
         self.num += 1
         self.nodes[origin][1][symbol] = self.num  # seleciona-se a posição 2 do tuplo para adicionar no segundo dicionário com o simbolo
@@ -35,6 +36,7 @@ class SuffixTree:
    
 
     def suffix_tree_from_seq(self, text):
+        self.sequence = text
         t = text+"$"
         for i in range(len(t)):
             self.add_suffix(t[i:], i)  # adiciona no final da sequencia um "$", e a partir dessa faz a arvore de sufixos com a função add_suffix
@@ -80,11 +82,21 @@ class SuffixTree:
 
 
     def matches_prefix(self, prefix):
-        res = [prefix] # primeiro elemento será sempre o próprio prefixo
+        res = [] # primeiro elemento será sempre o próprio prefixo
         st = ""  # string para, de cada vez que se avança o nó e se ve qual o elemento seguinte, concatena-se esse elemento para, em cada adição, adicinar à lista
-        pos = self.find_pattern(prefix)  # pos será uma lista com os indices onde o padrão se inicia na sequencia usada para construir a arvore
-        
-        res.append(st)
+        # pos = self.find_pattern(prefix)  # pos será uma lista com os indices onde o padrão se inicia na sequencia usada para construir a arvore
+        node = 0
+        for s in range(len(prefix)):
+            if prefix[s] in self.nodes[node][1].keys():
+                st += prefix[s]
+                node = self.nodes[node][1][prefix[s]]
+                if len(st) == len(prefix):
+                    res.append(st)
+        for x in range(len(prefix), len(self.sequence)):
+            if self.sequence[x] in self.nodes[node][1].keys():
+                st += self.sequence[x]
+                node = self.nodes[node][1][self.sequence[x]]
+                res.append(st)
         return res
 
 

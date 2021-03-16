@@ -2,9 +2,11 @@
 
 class SuffixTree:
     
-    def __init__(self):
-        self.nodes = { 0:(-1, -1,{}) } # {root node:(numero da sequencia 0 ou 1, se for nó será -1, {simbolo: no seguinte})}
-        self.num = 0
+    def __init__(self, seqlist, finishchars):
+        self.nodes = { 0:(-1, -1,{}) }
+        self.num = 0  # contador de nós
+        self.seqs = seqlist  # lista de sequencias para construir a arvore de sufixos
+        self.char = finishchars  # lista de caracteres de terminação, que cada um corresponde à sequencia com o mesmo indice em seqlist
 
 
     def print_tree(self):
@@ -33,12 +35,10 @@ class SuffixTree:
             
 
     def suffix_tree_from_seq(self, s1, s2):
-        seq1 = s1 + "$"
-        seq2 = s2 + "#"
-        for i in range(len(seq1)):
-            self.add_suffix(seq1[i:], 0, i)  # i representa a posicao incial do sufixo na sequencia, 0 representa a sequencia 1
-        for j in range(len(seq2)):
-            self.add_suffix(seq2[j:], 1, j)  # j representa a posicao incial do sufixo na sequencia, 1 representa a sequencia 2
+        for seq in range(len(self.seqs)):
+            sequence = self.seqs[seq] + self.char[seq]
+            for i in range(len(sequence)):
+                self.add_suffix(sequence[i:], seq, i)  # i representa a posicao incial do sufixo na sequencia, seq representa o numero da sequencia
 
 
     def find_pattern(self, pattern):
@@ -80,25 +80,3 @@ class SuffixTree:
         subseq = ""
 
         pass
-
-
-def test():
-    seq1 = "TACTA"
-    seq2 = "TAGAC"
-    st = SuffixTree()
-    st.suffix_tree_from_seq(seq1, seq2)
-    st.print_tree()
-    print (st.find_pattern("TA"))
-    print (st.find_pattern("ACG"))
-
-def test2():
-    seq1 = "TACTA"
-    seq2 = "ATGAC"
-    st = SuffixTree()
-    st.suffix_tree_from_seq(seq1, seq2)
-    print (st.find_pattern("TA"))
-    # print(st.repeats(2,2))
-
-test()
-print()
-test2()
