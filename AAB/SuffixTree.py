@@ -87,10 +87,15 @@ class SuffixTree:
         if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
             for sym, no in self.nodes[node][1].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
                 res.append(symb)  # adiciona imediatamente o primero simbolo que vê
-                node = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)
-                for symb in self.nodes[no][1].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
-                    res.append(symb)  # adicona-se o simbolo
-                    no = self.nodes[no][1][symb]  # passa-se para o proximo nó
+                no = node  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)
+                if self.nodes[no][0] >= 0:  # quando chegar a folha
+                    continue
+                else:
+                    for symb in self.nodes[no][1].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
+                        res.append(symb)  # adicona-se o simbolo
+                        no = self.nodes[no][1][symb]  # passa-se para o proximo nó
+                        if self.nodes[no][0] >= 0:  # quando chegar a folha
+                            break  # quebra este ciclo e passa ao ciclo exterior
             return res  # retorna a lista de simbolos
         else:
             return "That's a leaf!"
