@@ -3,7 +3,7 @@
 class SuffixTree:
     
     def __init__(self):
-        self.nodes = { 0:(-1, -1,{}) } # {root node:(numero da sequencia 0 ou 1, se for nó será -1, {simbolo: no seguinte})}
+        self.nodes = { 0:(-1, -1,{}) } # {root node:(numero da sequencia 0 ou 1, se for nó será -1, {simbolo: nó seguinte})}
         self.num = 0
 
 
@@ -17,8 +17,8 @@ class SuffixTree:
 
     def add_node(self, origin, symbol, seqnum = -1, leafnum = -1):
         self.num += 1
-        self.nodes[origin][2][symbol] = self.num #seleciona-se a posição 2 do tuplo para adicionar no segundo dicionário
-        self.nodes[self.num] = (seqnum, leafnum,{})
+        self.nodes[origin][2][symbol] = self.num  # seleciona-se a posição 2 do tuplo para adicionar no segundo dicionário o nó seguinte
+        self.nodes[self.num] = (seqnum, leafnum,{})  # abre o proximo
 
 
     def add_suffix(self, p, seqnum, sufnum):
@@ -28,7 +28,7 @@ class SuffixTree:
                 if s == len(p)-1: #se a posição em que nos encontramos é a final do sufixo
                     self.add_node(no, p[s], seqnum, sufnum)  #adiciona o ultimo no, ou seja a folha
                 else:
-                    self.add_node(no, p[s])
+                    self.add_node(no, p[s], seqnum)
             no = self.nodes[no][2][p[s]]
             
 
@@ -68,12 +68,31 @@ class SuffixTree:
                     newnode = self.nodes[node][2][k]
                     leafes = self.get_leafes_below(newnode)  # recursividade, volta a correr esta função ate ver que o novo nó passa a ser uma folha
                     res1.extend(leafes)
-            else:  # para o caso de ser a sequencia 1
+            else:  # para o caso de ser a sequencia 2
                 for k in self.nodes[node][2].keys():
                     newnode = self.nodes[node][2][k]
                     leafes = self.get_leafes_below(newnode)
                     res2.extend(leafes)
         return (res1, res2)
+
+
+    def nodes_below_2(self, node):
+        res = []  # lista de simbolos que aparecem depois do nó especificado
+        if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
+            for sym, no in self.nodes[node][1].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
+                res.append(symb)  # adiciona imediatamente o primero simbolo que vê
+                no = node  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)
+                if self.nodes[no][0] >= 0:  # quando chegar a folha
+                    continue
+                else:
+                    for symb in self.nodes[no][1].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
+                        res.append(symb)  # adicona-se o simbolo
+                        no = self.nodes[no][1][symb]  # passa-se para o proximo nó
+                        if self.nodes[no][0] >= 0:  # quando chegar a folha
+                            break  # quebra este ciclo e passa ao ciclo exterior
+            return res  # retorna a lista de simbolos
+        else:
+            return "That's a leaf!"
 
 
     def largestCommonSubstring(self):

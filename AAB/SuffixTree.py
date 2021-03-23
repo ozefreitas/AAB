@@ -3,7 +3,7 @@
 class SuffixTree:
     
     def __init__(self):
-        self.nodes = { 0:(-1,{}) } # root node, se for -1 representa um nó, caso contrário é uma folha
+        self.nodes = { 0:(-1,{}) } # {root node:(se for nó será -1, {simbolo: nó seguinte})}
         self.num = 0
         self.sequence = ""
 
@@ -19,7 +19,7 @@ class SuffixTree:
     def add_node(self, origin, symbol, leafnum = -1): # mesmo efeito que na trie
         self.num += 1
         self.nodes[origin][1][symbol] = self.num  # seleciona-se a posição 2 do tuplo para adicionar no segundo dicionário com o simbolo
-        self.nodes[self.num] = (leafnum,{})
+        self.nodes[self.num] = (leafnum,{})  # abre o proximo, no caso de ser uma folha, vai ter um novo leafnum que vem da função a baixo, e nao vai ter dicionário interno
 
 
     def add_suffix(self, p, sufnum):  # mesmo efeito que add_pattern em trie
@@ -74,7 +74,7 @@ class SuffixTree:
 #                for k in self.nodes[node+t][1].keys():
 #                    res.append(k)
 #                    if k == "$" and len(self.nodes[node+t][1]) == 1:  # se essa key for igual a $ e estiver sozinha nesse dicionario do no a analisar, quer dizer que chegamos à folha
-#                        return res  # e pode-se dar return à lista 
+#                        break  # e pode-se dar return à lista 
 #                t += 1  
 #            return res 
 #        else:
