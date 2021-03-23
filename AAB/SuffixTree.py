@@ -83,7 +83,6 @@ class SuffixTree:
 
     def nodes_below_2(self, node):
         res = []  # lista de simbolos que aparecem depois do nó especificado
-        t = 0
         if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
             for sym, no in self.nodes[node][1].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
                 res.append(symb)  # adiciona imediatamente o primero simbolo que vê
