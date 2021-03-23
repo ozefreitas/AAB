@@ -81,6 +81,21 @@ class SuffixTree:
             return "That's a leaf!"
 
 
+    def nodes_below_2(self, node):
+        res = []  # lista de simbolos que aparecem depois do nó especificado
+        t = 0
+        if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
+            for sym, no in self.nodes[node][1].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
+                res.append(symb)  # adiciona imediatamente o primero simbolo que vê
+                node = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)
+                for symb in self.nodes[no][1].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
+                    res.append(symb)  # adicona-se o simbolo
+                    no = self.nodes[no][1][symb]  # passa-se para o proximo nó
+            return res  # retorna a lista de simbolos
+        else:
+            return "That's a leaf!"
+
+
     def matches_prefix(self, prefix):
         res = [] # primeiro elemento será sempre o próprio prefixo
         st = ""  # string para, de cada vez que se avança o nó e se ve qual o elemento seguinte, concatena-se esse elemento para, em cada adição, adicinar à lista
