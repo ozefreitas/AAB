@@ -97,8 +97,19 @@ class SuffixTree:
 
     def largestCommonSubstring(self):
         subseq = ""
+        s1 = 0
+        s2 = 0
+        for n in self.nodes:
+            lst = []
+            if len(self.nodes[n]) > 1:
+                for x in self.nodes[n]:
+                    
+                # for v in self.nodes[n].values():
+                #     lst.append(v)
+                #     for i in range(len(lst)-1):
+                #         if lst[i][0] != lst[i+1][0]:
 
-        pass
+        return subseq
 
 
 def test():
