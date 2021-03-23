@@ -65,21 +65,21 @@ class SuffixTree:
         return res
 
 
-    def nodes_below(self, node):
-        # enquanto nao encontrar um dicionário "interno" com apenas um elemento e esse elemento seja $; quando encontrar, para
-        res = []
-        t = 0
-        if self.nodes[node][0] < 0:
-            while t < len(self.nodes):  # dar uma folga
-                for k in self.nodes[node+t][1].keys():
-                    res.append(k)
-                    if k == "$" and len(self.nodes[node+t][1]) == 1:  # se essa key for igual a $ e estiver sozinha nesse dicionario do no a analisar, quer dizer que chegamos à folha
-                        return res  # e pode-se dar return à lista 
-                t += 1  
-            return res 
-        else:
-            return "That's a leaf!"
-
+#    def nodes_below(self, node):
+#        # enquanto nao encontrar um dicionário "interno" com apenas um elemento e esse elemento seja $; quando encontrar, para
+#        res = []
+#        t = 0
+#        if self.nodes[node][0] < 0:
+#            while t < len(self.nodes):  # dar uma folga
+#                for k in self.nodes[node+t][1].keys():
+#                    res.append(k)
+#                    if k == "$" and len(self.nodes[node+t][1]) == 1:  # se essa key for igual a $ e estiver sozinha nesse dicionario do no a analisar, quer dizer que chegamos à folha
+#                        return res  # e pode-se dar return à lista 
+#                t += 1  
+#            return res 
+#        else:
+#            return "That's a leaf!"
+#
 
     def nodes_below_2(self, node):
         res = []  # lista de simbolos que aparecem depois do nó especificado
