@@ -65,23 +65,35 @@ class SuffixTree:
         return res
 
 
-#    def nodes_below(self, node):
-#        # enquanto nao encontrar um dicionário "interno" com apenas um elemento e esse elemento seja $; quando encontrar, para
-#        res = []
-#        t = 0
-#        if self.nodes[node][0] < 0:
-#            while t < len(self.nodes):  # dar uma folga
-#                for k in self.nodes[node+t][1].keys():
-#                    res.append(k)
-#                    if k == "$" and len(self.nodes[node+t][1]) == 1:  # se essa key for igual a $ e estiver sozinha nesse dicionario do no a analisar, quer dizer que chegamos à folha
-#                        break  # e pode-se dar return à lista 
-#                t += 1  
-#            return res 
-#        else:
-#            return "That's a leaf!"
-#
+    def nodes_below(self, node):
+        res = []
+        if node in self.nodes.keys():  # verifica se o nó especificado é um nó da arvore
+            for value in self.nodes[node][1].values():  # guarda em value os nos que estao no dicionário interior
+                res.append(value)
+            for nos in res:
+                for values in self.nodes[nos][1].values():  # para os nos em res, atribui o no seguinte a values
+                    res.append(values)  # e adiciona esse no a res, que por cada valor que adicona a res, permite que haja outro no e haja mais um ciclo
+            return sorted(res)
+        else:
+            return None
 
-    def nodes_below_2(self, node):
+
+    def nodes_below_symb(self, node):
+        res = []
+        nodulos = []
+        if node in self.nodes.keys():
+            for sym, no in self.nodes[node][1].items():
+                nodulos.append(no)
+                res.append(sym)
+            for nos in nodulos:
+                for symb in self.nodes[nos][1].keys():
+                    res.append(symb)
+            return res
+        else:
+            return None
+
+
+    def nodes_below_symb_2(self, node):
         res = []  # lista de simbolos que aparecem depois do nó especificado
         newnode = 0
         if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
@@ -101,7 +113,7 @@ class SuffixTree:
             #                    break  # quebra este ciclo e passa ao ciclo exterior
             #    return res  # retorna a lista de simbolos
         else:
-            return "That's a leaf!"
+            return None
 
 
     def matches_prefix(self, prefix):
@@ -143,8 +155,12 @@ def test3():
     st = SuffixTree()
     st.suffix_tree_from_seq(seq)
     st.print_tree()
-    print(st.nodes_below_2(3))
-    print(st.nodes_below_2(6))
+    print(st.nodes_below(0))
+    print(st.nodes_below(6))
+    #print(st.nodes_below_symb(3))
+    #print(st.nodes_below_symb(6))
+    print(st.nodes_below_symb_2(3))
+    #print(st.nodes_below_2(6))
     #print(st.matches_prefix("AC"))
 
 #test()
@@ -152,24 +168,24 @@ def test3():
 #test2()
 test3()
 
-#0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18}
-#1 -> {'A': 2}
-#2 -> {'C': 3, '$': 16}
-#3 -> {'T': 4}
-#4 -> {'A': 5}
-#5 -> {'$': 6}
-#6 : 0
-#7 -> {'C': 8, '$': 17}
-#8 -> {'T': 9}
-#9 -> {'A': 10}
-#10 -> {'$': 11}
-#11 : 1
-#12 -> {'T': 13}
-#13 -> {'A': 14}
-#14 -> {'$': 15}
-#15 : 2
-#16 : 3
-#17 : 4
-#18 : 5
-#[0, 3]
-#None
+# 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18}
+# 1 -> {'A': 2}
+# 2 -> {'C': 3, '$': 16}
+# 3 -> {'T': 4}
+# 4 -> {'A': 5}
+# 5 -> {'$': 6}
+# 6 : 0
+# 7 -> {'C': 8, '$': 17}
+# 8 -> {'T': 9}
+# 9 -> {'A': 10}
+# 10 -> {'$': 11}
+# 11 : 1
+# 12 -> {'T': 13}
+# 13 -> {'A': 14}
+# 14 -> {'$': 15}
+# 15 : 2
+# 16 : 3
+# 17 : 4
+# 18 : 5
+# [0, 3]
+# None

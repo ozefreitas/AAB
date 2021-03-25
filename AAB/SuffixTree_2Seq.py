@@ -5,14 +5,15 @@ class SuffixTree:
     def __init__(self):
         self.nodes = { 0:(-1, -1,{}) } # {root node:(numero da sequencia 0 ou 1, se for nó será -1, {simbolo: nó seguinte})}
         self.num = 0
-
+        self.seq1 = ""
+        self.seq2 = ""
 
     def print_tree(self):
         for k in self.nodes.keys():
             if self.nodes[k][1] < 0:
                 print (k, "->", self.nodes[k][2]) 
             else:
-                print (k, ":", self.nodes[k][0], self.nodes[k][1])
+                print (k, ": Seqnum:", self.nodes[k][0],"Sufixnum:", self.nodes[k][1])
 
 
     def add_node(self, origin, symbol, seqnum = -1, leafnum = -1):
@@ -33,6 +34,8 @@ class SuffixTree:
             
 
     def suffix_tree_from_seq(self, s1, s2):
+        self.seq1 = s1
+        self.seq2 = s2
         seq1 = s1 + "$"
         seq2 = s2 + "#"
         for i in range(len(seq1)):
@@ -77,38 +80,47 @@ class SuffixTree:
 
 
     def nodes_below(self, node):
+        res = []
+        if node in self.nodes.keys():  # verifica se o nó especificado é um nó da arvore
+            for value in self.nodes[node][2].values():  # guarda em value os nos que estao no dicionário interior
+                res.append(value)
+            for nos in res:
+                for values in self.nodes[nos][2].values():  # para os nos em res, atribui o no seguinte a values
+                    res.append(values)  # e adiciona esse no a res, que por cada valor que adicona a res, permite que haja outro no e haja mais um ciclo
+            return sorted(res)
+        else:
+            return None
+
+
+    def nodes_below_symb(self, node):
         res = []  # lista de simbolos que aparecem depois do nó especificado
         newnode = 0
         if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
-            for sym, no in self.nodes[node][1].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
+            for sym, no in self.nodes[node][2].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
                 res.append(sym)  # adiciona imediatamente o primero simbolo que vê
                 newnode = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)   
                 if self.nodes[newnode][0] >= 0:  # quando chegar a folha
                     continue
                 else:
                     while self.nodes[newnode][0] < 0:  # enquanto for um nó
-                        for symb in self.nodes[newnode][1].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
+                        for symb in self.nodes[newnode][2].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
                             res.append(symb)  # adicona-se o simbolo
-                        newnode = self.nodes[newnode][1][symb]  # passa-se para o proximo nó
+                        newnode = self.nodes[newnode][2][symb]  # passa-se para o proximo nó
                 return res
         else:
-            return "That's a leaf!"
+            return None
 
 
     def largestCommonSubstring(self):
-        subseq = ""
-        s1 = 0
-        s2 = 0
-        for n in self.nodes:
-            lst = []
-            if len(self.nodes[n]) > 1:
-                for x in self.nodes[n]:
-                    
-                # for v in self.nodes[n].values():
-                #     lst.append(v)
-                #     for i in range(len(lst)-1):
-                #         if lst[i][0] != lst[i+1][0]:
-
+        subseq = ""  # maior sequencia será guardada
+        for x in range(len(self.seq1)):  # corre a primeira sequencia
+            for y in range(len(self.seq2)):  # corre a segunda sequencia
+                c = 1
+                while x + c <= len(self.seq1) and y + c <= len(self.seq2):  # ciclo while que vai permitir aumentar a janela a analisar em ambas as sequencias
+                    if self.seq1[x:x+c] == self.seq2[y:y+c]:  # se os caracteres fruto deste splicing forem iguais de uma seq para a outra
+                        if len(subseq) <= len(self.seq1[x:x+c]):  # e se o tamanho desse for maior ou igual que o tamanho da subsequencia já gravada
+                            subseq = self.seq1[x:x+c]  # subsquencia comum passa a ser essa
+                    c += 1  # vai correr até que o tamanho da janela supere o tamanha de uma das sequencias
         return subseq
 
 
@@ -118,8 +130,8 @@ def test():
     st = SuffixTree()
     st.suffix_tree_from_seq(seq1, seq2)
     st.print_tree()
-    print (st.find_pattern("TA"))
-    print (st.find_pattern("ACG"))
+    #print (st.find_pattern("TA"))
+    #print (st.find_pattern("ACG"))
 
 def test2():
     seq1 = "TACTA"
@@ -128,6 +140,52 @@ def test2():
     st.suffix_tree_from_seq(seq1, seq2)
     # print (st.find_pattern("TA"))
 
-test()
-print()
-test2()
+def test3():
+    seq1 = "TACTA"
+    seq2 = "ATGAC"
+    st = SuffixTree()
+    st.suffix_tree_from_seq(seq1, seq2)
+    st.print_tree()
+    print(st.largestCommonSubstring())
+
+#test()
+#print()
+#test2()
+test3()
+
+
+# 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18, 'G': 28, '#': 34}
+# 1 -> {'A': 2, 'G': 24}
+# 2 -> {'C': 3, '$': 16}
+# 3 -> {'T': 4}
+# 4 -> {'A': 5}
+# 5 -> {'$': 6}
+# 6 : Seqnum: 0 Sufixnum: 0
+# 7 -> {'C': 8, '$': 17, 'T': 19}
+# 8 -> {'T': 9, '#': 32}
+# 9 -> {'A': 10}
+# 10 -> {'$': 11}
+# 11 : Seqnum: 0 Sufixnum: 1
+# 12 -> {'T': 13, '#': 33}
+# 13 -> {'A': 14}
+# 14 -> {'$': 15}
+# 15 : Seqnum: 0 Sufixnum: 2
+# 16 : Seqnum: 0 Sufixnum: 3
+# 17 : Seqnum: 0 Sufixnum: 4
+# 18 : Seqnum: 0 Sufixnum: 5
+# 19 -> {'G': 20}
+# 20 -> {'A': 21}
+# 21 -> {'C': 22}
+# 22 -> {'#': 23}
+# 23 : Seqnum: 1 Sufixnum: 0
+# 24 -> {'A': 25}
+# 25 -> {'C': 26}
+# 26 -> {'#': 27}
+# 27 : Seqnum: 1 Sufixnum: 1
+# 28 -> {'A': 29}
+# 29 -> {'C': 30}
+# 30 -> {'#': 31}
+# 31 : Seqnum: 1 Sufixnum: 2
+# 32 : Seqnum: 1 Sufixnum: 3
+# 33 : Seqnum: 1 Sufixnum: 4
+# 34 : Seqnum: 1 Sufixnum: 5

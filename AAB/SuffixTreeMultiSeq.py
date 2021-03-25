@@ -62,9 +62,3 @@ class SuffixTree:
                 leafes = self.get_leafes_below(newnode)  # e vai correr novamente esta função para esse value, até encontrar um valor negativo, que representa o $
                 res.extend(leafes)
         return res
-
-
-    def largestCommonSubstring(self):
-        subseq = ""
-
-        pass
