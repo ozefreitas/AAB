@@ -30,8 +30,8 @@ class SuffixTree:
                 if s == len(p)-1: #se a posição em que nos encontramos é a final do sufixo
                     self.add_node(no, p[s], seqnum, sufnum)  #adiciona o ultimo no, ou seja a folha
                 else:
-                    self.add_node(no, p[s], seqnum)
-            no = self.nodes[no][2][p[s]]
+                    self.add_node(no, p[s], seqnum)  # caso contrário, adiciona um nó, e o quarto argumento mantem o default na função de cima, ou seja, fica -1
+            no = self.nodes[no][2][p[s]]  # passar ao proximo nó
             
 
     def suffix_tree_from_seq(self):
