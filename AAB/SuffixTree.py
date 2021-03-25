@@ -83,19 +83,23 @@ class SuffixTree:
 
     def nodes_below_2(self, node):
         res = []  # lista de simbolos que aparecem depois do nó especificado
+        newnode = 0
         if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
             for sym, no in self.nodes[node][1].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
-                res.append(symb)  # adiciona imediatamente o primero simbolo que vê
-                no = node  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)
-                if self.nodes[no][0] >= 0:  # quando chegar a folha
+                res.append(sym)  # adiciona imediatamente o primero simbolo que vê
+                newnode = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)
+        #    return (res, no)    
+                if self.nodes[newnode][0] >= 0:  # quando chegar a folha
                     continue
                 else:
-                    for symb in self.nodes[no][1].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
-                        res.append(symb)  # adicona-se o simbolo
-                        no = self.nodes[no][1][symb]  # passa-se para o proximo nó
-                        if self.nodes[no][0] >= 0:  # quando chegar a folha
-                            break  # quebra este ciclo e passa ao ciclo exterior
-            return res  # retorna a lista de simbolos
+                    while self.nodes[newnode][0] < 0:  # enquanto for um nó
+                        for symb in self.nodes[newnode][1].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
+                            res.append(symb)  # adicona-se o simbolo
+                        newnode = self.nodes[newnode][1][symb]  # passa-se para o proximo nó
+                return res
+            #                if self.nodes[newnode][0] >= 0:  # quando chegar a folha
+            #                    break  # quebra este ciclo e passa ao ciclo exterior
+            #    return res  # retorna a lista de simbolos
         else:
             return "That's a leaf!"
 
@@ -131,12 +135,22 @@ def test2():
     seq = "TACTA"
     st = SuffixTree()
     st.suffix_tree_from_seq(seq)
+    st.print_tree()
     print (st.find_pattern("TA"))
-    # print(st.repeats(2,2))
 
-test()
-print()
+def test3():
+    seq = "TACTA"
+    st = SuffixTree()
+    st.suffix_tree_from_seq(seq)
+    st.print_tree()
+    print(st.nodes_below_2(3))
+    print(st.nodes_below_2(6))
+    #print(st.matches_prefix("AC"))
+
+#test()
+#print()
 #test2()
+test3()
 
 #0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18}
 #1 -> {'A': 2}
