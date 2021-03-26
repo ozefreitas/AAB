@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class SuffixTree:
+class SuffixTree_2Seq:
     
     def __init__(self):
         self.nodes = { 0:(-1, -1,{}) } # {root node:(numero da sequencia 0 ou 1, se for nó será -1, {simbolo: nó seguinte})}
@@ -127,7 +127,7 @@ class SuffixTree:
 def test():
     seq1 = "TACTA"
     seq2 = "TAGAC"
-    st = SuffixTree()
+    st = SuffixTree_2Seq()
     st.suffix_tree_from_seq(seq1, seq2)
     st.print_tree()
     print (st.find_pattern("TA"))
@@ -136,14 +136,14 @@ def test():
 def test2():
     seq1 = "TACTA"
     seq2 = "ATGAC"
-    st = SuffixTree()
+    st = SuffixTree_2Seq()
     st.suffix_tree_from_seq(seq1, seq2)
     # print (st.find_pattern("TA"))
 
 def test3():
     seq1 = "TACTA"
     seq2 = "ATGAC"
-    st = SuffixTree()
+    st = SuffixTree_2Seq()
     st.suffix_tree_from_seq(seq1, seq2)
     st.print_tree()
     print(st.nodes_below(0))
@@ -151,7 +151,7 @@ def test3():
 def test4():
     seq1 = "TACTA"
     seq2 = "ATGAC"
-    st = SuffixTree()
+    st = SuffixTree_2Seq()
     st.suffix_tree_from_seq(seq1, seq2)
     st.print_tree()
     print(st.largestCommonSubstring())

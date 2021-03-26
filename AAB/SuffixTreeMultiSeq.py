@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class SuffixTree:
+class SuffixTreeMultiSeq:
     
     def __init__(self, seqlist, finishchars):
         self.nodes = { 0:(-1, -1,{}) }  # {root node:(numero da sequencia 0 ou 1, se for nó será -1, {simbolo: nó seguinte})}
@@ -62,3 +62,13 @@ class SuffixTree:
                 leafes = self.get_leafes_below(newnode)  # e vai correr novamente esta função para esse value, até encontrar um valor negativo, que representa o $
                 res.extend(leafes)
         return res
+
+
+def test():
+    lst = ["TACAG", "TACTG", "AGTCG", "CTAGC"]
+    lst2 = ["$", "#", "*", "%", "&"]
+    st = SuffixTreeMultiSeq(lst, lst2)
+    st.suffix_tree_from_seq()
+    st.print_tree()
+
+test()
