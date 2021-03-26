@@ -161,12 +161,18 @@ def test3():
     #print(st.nodes_below_symb(6))
     print(st.nodes_below_symb_2(3))
     #print(st.nodes_below_2(6))
-    #print(st.matches_prefix("AC"))
+
+def test4():
+    seq = "TACTA"
+    st = SuffixTree()
+    st.suffix_tree_from_seq(seq)
+    #st.print_tree()    
+    print(st.matches_prefix("AC"))
 
 #test()
-#print()
 #test2()
-test3()
+#test3()
+test4()
 
 # 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18}
 # 1 -> {'A': 2}
