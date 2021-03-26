@@ -45,22 +45,22 @@ class SuffixTree:
     def find_pattern(self, pattern):
         pos = 0
         node = 0
-        for pos in range(len(pattern)):
-            if pattern[pos] in self.nodes[node][1].keys():
+        for pos in range(len(pattern)):  # percorre o padrao
+            if pattern[pos] in self.nodes[node][1].keys():  # vê se o simbolo do padrao existe como sufixo da arvore
                 node = self.nodes[node][1][pattern[pos]]  # o value do dicionario "interno" diz para qual no se deve ir a seguir para continuarmos a ver o sufixo
             else:
                 return None
-        return self.get_leafes_below(node)  # se encontrar um match, corre a funçar a baixo para ver qual a posição inicial do padrao na sequencia, que é dada pelas folhas
+        return self.get_leafes_below(node)  # se encontrar um match, corre a funçao a baixo para ver qual a posição inicial do padrao na sequencia, que é dada pelas folhas
         
 
     def get_leafes_below(self, node):
         res = [] #posicoes onde ocorre o padrao
         if self.nodes[node][0] >=0:  # se esse no, no primeiro elemento do tuplo nao tiver um valor positivo ou zero, quer dizer que é uma folha, e que encontramos o padrao
             res.append(self.nodes[node][0]) # por isso podemos adicionar o valor desse tuplo, que corresponde ao indice de onde começa o sufixo na sequencia
-        else:
-            for k in self.nodes[node][1].keys():  # para os restantes nós
-                newnode = self.nodes[node][1][k]  # vai percorrer os values de k dentro das keys node
-                leafes = self.get_leafes_below(newnode)  # e vai correr novamente esta função para esse value, até encontrar um valor negativo, que representa o $
+        else:  # se o no que veio da função find_pattern ainda nao for uma folha
+            for k in self.nodes[node][1].keys():  # k vai tomar o simbolo para o nó atual  
+                newnode = self.nodes[node][1][k]  # e o value correspondente ao simbolo de cima, será o proximo nó
+                leafes = self.get_leafes_below(newnode)  # e vai correr novamente esta função para esse nó, até encontrar um valor negativo, que representa a folha
                 res.extend(leafes)
         return res
 
@@ -68,17 +68,18 @@ class SuffixTree:
     def nodes_below(self, node):
         res = []
         if node in self.nodes.keys():  # verifica se o nó especificado é um nó da arvore
-            for value in self.nodes[node][1].values():  # guarda em value os nos que estao no dicionário interior
-                res.append(value)
+            for value in self.nodes[node][1].values():  # guarda em value os nos que estao no dicionário interior, para o caso do nó especificado ter mais que um ramo associado
+                res.append(value) # adiciona esses nos 
             for nos in res:
-                for values in self.nodes[nos][1].values():  # para os nos em res, atribui o no seguinte a values
+                for values in self.nodes[nos][1].values():  # para os nos em res, atribui o nó seguinte a values
                     res.append(values)  # e adiciona esse no a res, que por cada valor que adicona a res, permite que haja outro no e haja mais um ciclo
             return sorted(res)
         else:
             return None
 
 
-    def nodes_below_symb(self, node):
+    def nodes_below_symb(self, node):  # faz a mesma coisa que nodes_below mas retorna os simbolos que estao depois do nó
+        # pode ser util para ver um ramo inteiro (simbolos) a partir de um nó
         res = []
         nodulos = []
         if node in self.nodes.keys():
@@ -86,8 +87,9 @@ class SuffixTree:
                 nodulos.append(no)
                 res.append(sym)
             for nos in nodulos:
-                for symb in self.nodes[nos][1].keys():
-                    res.append(symb)
+                for symb, v in self.nodes[nos][1].items():  # divide em simbolos e nós seguintes
+                    res.append(symb)  # à lista final adiciona o simbolo que veio do nó atual
+                    nodulos.append(v)  # guarda o nó que está associado ao simbolo, que será o nó seguinte, esta lista depois é usado novamente noutro ciclo, sempre que se adicona um novo nó
             return res
         else:
             return None
@@ -157,7 +159,7 @@ def test3():
     st.print_tree()
     print(st.nodes_below(0))
     print(st.nodes_below(6))
-    #print(st.nodes_below_symb(3))
+    print(st.nodes_below_symb(3))
     #print(st.nodes_below_symb(6))
     print(st.nodes_below_symb_2(3))
     #print(st.nodes_below_symb_2(6))
@@ -171,8 +173,8 @@ def test4():
 
 #test()
 #test2()
-#test3()
-test4()
+test3()
+#test4()
 
 # 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18}
 # 1 -> {'A': 2}

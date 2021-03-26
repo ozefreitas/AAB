@@ -76,7 +76,7 @@ class SuffixTree:
                     newnode = self.nodes[node][2][k]
                     leafes = self.get_leafes_below(newnode)
                     res2.extend(leafes)
-        return (res1, res2)
+        return res1, res2
 
 
     def nodes_below(self, node):
@@ -130,7 +130,7 @@ def test():
     st = SuffixTree()
     st.suffix_tree_from_seq(seq1, seq2)
     st.print_tree()
-    #print (st.find_pattern("TA"))
+    print (st.find_pattern("TA"))
     #print (st.find_pattern("ACG"))
 
 def test2():
@@ -146,12 +146,21 @@ def test3():
     st = SuffixTree()
     st.suffix_tree_from_seq(seq1, seq2)
     st.print_tree()
+    print(st.nodes_below(0))
+
+def test4():
+    seq1 = "TACTA"
+    seq2 = "ATGAC"
+    st = SuffixTree()
+    st.suffix_tree_from_seq(seq1, seq2)
+    st.print_tree()
     print(st.largestCommonSubstring())
 
-#test()
+test()
 #print()
 #test2()
-test3()
+#test3()
+#test4()
 
 
 # 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18, 'G': 28, '#': 34}
