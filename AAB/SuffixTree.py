@@ -118,21 +118,21 @@ class SuffixTree:
 
     def matches_prefix(self, prefix):
         res = [] # primeiro elemento será sempre o próprio prefixo
-        st = ""  # string para, de cada vez que se avança o nó e se ve qual o elemento seguinte, concatena-se esse elemento para, em cada adição, adicinar à lista
+        st = ""  # string para, de cada vez que se avança o nó e se ve qual o elemento seguinte, concatena-se esse elemento, para que em cada adição, se adicinar à lista
         # pos = self.find_pattern(prefix)  # pos será uma lista com os indices onde o padrão se inicia na sequencia usada para construir a arvore
         node = 0
-        for s in range(len(prefix)):
-            if prefix[s] in self.nodes[node][1].keys():
-                st += prefix[s]
-                node = self.nodes[node][1][prefix[s]]
-                if len(st) == len(prefix):
-                    res.append(st)
-        for x in range(len(prefix), len(self.sequence)):
-            if self.sequence[x] in self.nodes[node][1].keys():
-                st += self.sequence[x]
-                node = self.nodes[node][1][self.sequence[x]]
-                res.append(st)
-        return res
+        for s in range(len(prefix)):  # corre o tamanho do prefixo
+            if prefix[s] in self.nodes[node][1].keys():  # se virmos que o simbolo ocorre na arvore
+                st += prefix[s]  # adiciona-se a st
+                node = self.nodes[node][1][prefix[s]]  # o proximo nó será o value correspondente ao simbolo do prefixo que se acabou de ver
+                if len(st) == len(prefix):  # quando virmos que o st está com o mesmo tamanho que o prefixo
+                    res.append(st)  # podemos adicionar a lista resultado
+        for x in range(len(prefix), len(self.sequence)):  # agora queremos correr o resto que falta ate ao fim da sequencia 
+            if self.sequence[x] in self.nodes[node][1].keys():  # o simbolo x da sequencia irá estar no nó seguinte, que ficou guardado anteriormente
+                st += self.sequence[x]  # e concatena se esse simbolo a st
+                node = self.nodes[node][1][self.sequence[x]]  # passamos para o nó seguinte, que será o que está associado ao simbolo que acabamos de analisar
+                res.append(st)  # e adiona-se imediatamente a subseq guardada em st
+        return res 
 
 
 def test():
@@ -160,7 +160,7 @@ def test3():
     #print(st.nodes_below_symb(3))
     #print(st.nodes_below_symb(6))
     print(st.nodes_below_symb_2(3))
-    #print(st.nodes_below_2(6))
+    #print(st.nodes_below_symb_2(6))
 
 def test4():
     seq = "TACTA"
