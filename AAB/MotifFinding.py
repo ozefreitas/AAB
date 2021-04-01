@@ -15,31 +15,34 @@ class MotifFinding:
             self.alphabet = seqs[0].alfabeto()
         else:
             self.seqs = []
-                    
+
+
     def __len__ (self):
         return len(self.seqs)
-    
+
+
     def __getitem__(self, n):
         return self.seqs[n]
-    
+
+
     def seqSize (self, i):
         return len(self.seqs[i])
-    
+
+
     def readFile(self, fic, t):
         for s in open(fic, "r"):
             self.seqs.append(MySeq(s.strip().upper(),t))
         self.alphabet = self.seqs[0].alfabeto()
-        
-        
+
+
     def createMotifFromIndexes(self, indexes):  # calcular o motif a parir de um vetor de posições iniciais 
         pseqs = []
         for i,ind in enumerate(indexes):
             pseqs.append( MySeq(self.seqs[i][ind:(ind+self.motifSize)], self.seqs[i].tipo) )
         return MyMotifs(pseqs)
-        
-        
+
     # SCORES
-        
+
     def score(self, s):
         score = 0
         motif = self.createMotifFromIndexes(s)
@@ -52,7 +55,8 @@ class MotifFinding:
                     maxcol = mat[i][j]
             score += maxcol
         return score
-   
+
+
     def scoreMult(self, s):
         score = 1.0
         motif = self.createMotifFromIndexes(s)
@@ -65,9 +69,9 @@ class MotifFinding:
                     maxcol = mat[i][j]
             score *= maxcol
         return score     
-       
+
     # EXHAUSTIVE SEARCH
-       
+
     def nextSol (self, s):  # vai iterar sobre o vetor de posicoes inciais 
         nextS = [0]*len(s)
         pos = len(s) - 1     
@@ -82,7 +86,7 @@ class MotifFinding:
             for i in range(pos+1, len(s)):
                 nextS[i] = 0
         return nextS
-        
+
     def exhaustiveSearch(self):
         melhorScore = -1
         res = []
@@ -94,9 +98,9 @@ class MotifFinding:
                 res = s
             s = self.nextSol(s)
         return res
-     
+
     # BRANCH AND BOUND     
-     
+
     def nextVertex (self, s):  # posições parciais, pode ser um tuplo de 2 ou mais elementos
         res =  []
         if len(s) < len(self.seqs): # internal node -> down one level
@@ -112,8 +116,8 @@ class MotifFinding:
                 for i in range(pos): res.append(s[i])
                 res.append(s[pos]+1)
         return res
-    
-    
+
+
     def bypass (self, s): # s é o mesmo que nextvertex
         res =  []
         pos = len(s) -1
@@ -124,7 +128,8 @@ class MotifFinding:
             for i in range(pos): res.append(s[i])
             res.append(s[pos]+1)
         return res
-        
+
+
     def branchAndBound (self):
         melhorScore = -1
         melhorMotif = None
@@ -148,22 +153,57 @@ class MotifFinding:
     # Consensus (heuristic)
   
     def heuristicConsensus(self):
-        # ...
-        return None
+        mf = MotifFinding(self.motifSize, self.seqs[:2])
+        s = mf.exhaustiveSearch()
+        for i in range(2, len(self.seqs)):
+            s.append(0)
+            melhorScore = -1
+            melhorposicao = 0
+            for j in range(self.seqSize(i)-self.motifSize+1):
+                s[i] = j
+                scoreatual = self.score(s)
+                if scoreatual > melhorScore:
+                    melhorScore = scoreatual
+                    melhorposicao = j
+                s[i] = melhorposicao
+        return s
 
     # Consensus (heuristic)
 
     def heuristicStochastic (self):
         from random import randint
-        
-        return None
+        s = [0] * self.seqs
+        for i in range(len(self.seqs)):
+            s[i] = randint(0, self.seqSize(i)-self.motifSize)
+        bestscore = self.score(s)
+        improve = True
+        while improve:
+            motif = self.createMotifFromIndexes(s)
+            motif.createPWM()
+            for i in range(len(self.seqs)):
+                s[i] = motif.mostProbableSeq(self.seqs[i])
+            scr = self.score(s)
+            if scr > bestscore:
+                bestscore = scr
+            else:
+                improve = False
+        return s
 
     # Gibbs sampling 
 
     def gibbs (self):
         from random import randint
-        # ...
-        return None
+        s = [0] * self.seqs
+        for i in range(len(self.seqs)):
+            s[i] = randint(0, self.seqSize(i)-self.motifSize)
+        seq_idx = (0, len(self.seqs)-1)
+        seq = self.seqs.pop(seq_idx)
+        s_partial = s.copy().remove(seq_idx)
+        motif = self.createMotifFromIndexes(s_partial)
+        motif.createPWM()
+        s[seq_idx] = motif.mostProbableSeq(seq)
+        return s
+
 
     def roulette(self, f):
         from random import random
@@ -229,8 +269,8 @@ def test4():
     print ("Score mult:" , mf.scoreMult(sol))
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
     
-    sol2 = mf.gibbs(1000)
-    print ("Score:" , mf.score(sol2))
-    print ("Score mult:" , mf.scoreMult(sol2))
+    #sol2 = mf.gibbs(1000)
+    #print ("Score:" , mf.score(sol2))
+    #print ("Score mult:" , mf.scoreMult(sol2))
 
-#test4()
+test4()
