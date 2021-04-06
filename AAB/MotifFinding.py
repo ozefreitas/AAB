@@ -82,7 +82,7 @@ class MotifFinding:
     # EXHAUSTIVE SEARCH
 
     def nextSol (self, s):  # vai iterar sobre o vetor de posicoes inciais 
-        nextS = [0]*len(s)
+        nextS = [0] * len(s)
         pos = len(s) - 1     
         while pos >=0 and s[pos] == self.seqSize(pos) - self.motifSize:  # enquanto nao chegar ao fim das combinacoes de posicoes iniciais
             pos -= 1
@@ -167,18 +167,18 @@ class MotifFinding:
   
     def heuristicConsensus(self):
         mf = MotifFinding(self.motifSize, self.seqs[:2])  # cria um objeto MotifFinding apenas para as primeiras duas sequencias
-        s = mf.exhaustiveSearch()  # nas quais fazemos uma procura exaustiva entre as dusa para determinar S1 e S2 
+        s = mf.exhaustiveSearch()  # nas quais fazemos uma procura exaustiva entre as duas para determinar S1 e S2 
         for i in range(2, len(self.seqs)):  # para as restantes sequencias
             s.append(0)
             melhorScore = -1
             melhorposicao = 0
             for j in range(self.seqSize(i)-self.motifSize+1):
-                s[i] = j
-                scoreatual = self.score(s)
-                if scoreatual > melhorScore:
-                    melhorScore = scoreatual
-                    melhorposicao = j
-                s[i] = melhorposicao
+                s[i] = j  # adiciona a sequencia seguinte para a poder comparar com o consenso das primeiras
+                scoreatual = self.score(s)  # faz o score 
+                if scoreatual > melhorScore:  # se o score melhorar
+                    melhorScore = scoreatual  # o melhor score passa a ser esse
+                    melhorposicao = j  # e o indice respetivo
+                s[i] = melhorposicao  # adiciona esse indice ao vetor de posições iniciais
         return s
 
     # Consensus (heuristic)
@@ -206,7 +206,7 @@ class MotifFinding:
 
     def gibbs (self):
         from random import randint
-        s = [0] * self.seqs
+        s = [0] * len(self.seqs)
         for i in range(len(self.seqs)):
             s[i] = randint(0, self.seqSize(i)-self.motifSize)
         seq_idx = (0, len(self.seqs)-1)
@@ -286,7 +286,7 @@ def test4():
     #print ("Score:" , mf.score(sol2))
     #print ("Score mult:" , mf.scoreMult(sol2))
 
-test1()
+#test1()
 #test2()
 #test3()
 #test4()
