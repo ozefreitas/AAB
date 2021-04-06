@@ -172,7 +172,7 @@ class MotifFinding:
 
     def heuristicStochastic (self):
         from random import randint
-        s = [0] * self.seqs
+        s = [0] * len(self.seqs)
         for i in range(len(self.seqs)):
             s[i] = randint(0, self.seqSize(i)-self.motifSize)
         bestscore = self.score(s)
@@ -261,7 +261,7 @@ def test3():
 
 def test4():
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt","dna")
+    mf.readFile("c:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt","dna")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
