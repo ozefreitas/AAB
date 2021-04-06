@@ -65,11 +65,12 @@ class MotifFinding:
     def scoreMult(self, s):
         """
         Igual a função score, só que em vez de se somar os consecutivos scores, multiplicam-se
+        Usa a PWM, ou seja, a frequencia de cada nucleotido a dividir pelo numero de sequencias 
         """
         score = 1.0
         motif = self.createMotifFromIndexes(s)
         motif.createPWM()
-        mat = motif.pwm
+        mat = motif.pwm  # matriz PWM
         for j in range(len(mat[0])):
             maxcol = mat[0][j]
             for  i in range(1, len(mat)):
@@ -98,7 +99,7 @@ class MotifFinding:
     def exhaustiveSearch(self):
         melhorScore = -1
         res = []
-        s = [0]* len(self.seqs)
+        s = [0] * len(self.seqs)  # vetor de posições iniciais
         while s is not None:
             sc = self.score(s)
             if (sc > melhorScore):
@@ -119,9 +120,11 @@ class MotifFinding:
             pos = len(s)-1 
             while pos >=0 and s[pos] == self.seqSize(pos) - self.motifSize:
                 pos -= 1
-            if pos < 0: res = None # last solution
+            if pos < 0: 
+                res = None # last solution
             else:
-                for i in range(pos): res.append(s[i])
+                for i in range(pos): 
+                    res.append(s[i])
                 res.append(s[pos]+1)
         return res
 
@@ -131,9 +134,11 @@ class MotifFinding:
         pos = len(s) -1
         while pos >=0 and s[pos] == self.seqSize(pos) - self.motifSize:
             pos -= 1
-        if pos < 0: res = None 
+        if pos < 0: 
+            res = None 
         else:
-            for i in range(pos): res.append(s[i])
+            for i in range(pos): 
+                res.append(s[i])
             res.append(s[pos]+1)
         return res
 
@@ -161,9 +166,9 @@ class MotifFinding:
     # Consensus (heuristic)
   
     def heuristicConsensus(self):
-        mf = MotifFinding(self.motifSize, self.seqs[:2])
-        s = mf.exhaustiveSearch()
-        for i in range(2, len(self.seqs)):
+        mf = MotifFinding(self.motifSize, self.seqs[:2])  # cria um objeto MotifFinding apenas para as primeiras duas sequencias
+        s = mf.exhaustiveSearch()  # nas quais fazemos uma procura exaustiva entre as dusa para determinar S1 e S2 
+        for i in range(2, len(self.seqs)):  # para as restantes sequencias
             s.append(0)
             melhorScore = -1
             melhorposicao = 0
@@ -229,7 +234,7 @@ class MotifFinding:
 
 def test1():  
     sm = MotifFinding()
-    sm.readFile("exemploMotifs.txt","dna")
+    sm.readFile("c:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt","dna")
     sol = [25,20,2,55,59]
     sa = sm.score(sol)
     print(sa)
@@ -260,7 +265,7 @@ def test2():
 
 def test3():
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt","dna")
+    mf.readFile("c:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt","dna")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -281,4 +286,7 @@ def test4():
     #print ("Score:" , mf.score(sol2))
     #print ("Score mult:" , mf.scoreMult(sol2))
 
-test4()
+test1()
+#test2()
+#test3()
+#test4()
