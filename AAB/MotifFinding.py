@@ -37,27 +37,35 @@ class MotifFinding:
 
     def createMotifFromIndexes(self, indexes):  # calcular o motif a parir de um vetor de posições iniciais 
         pseqs = []
-        for i,ind in enumerate(indexes):
-            pseqs.append( MySeq(self.seqs[i][ind:(ind+self.motifSize)], self.seqs[i].tipo) )
-        return MyMotifs(pseqs)
+        for i,ind in enumerate(indexes):  # i toma o indice para fazer a iteração das sequencias, e ind toma os valores de posições iniciais
+            pseqs.append( MySeq(self.seqs[i][ind:(ind+self.motifSize)], self.seqs[i].tipo) )   # por cada valor presente no vetor
+            # vai buscar a sequencia correspondente, e dentro dessa dar slice à subsequencia do tamanho do motif especificado ao inicio
+        return MyMotifs(pseqs)  # cria um objeto MyMotifs com os motifs resultantes
 
     # SCORES
 
-    def score(self, s):
+    def score(self, s): 
+        """
+        Recebe um vetor de posições inicias, que depois vai usar para criar os motifs (com a função
+        createMotifFromIndexes) em cada sequencia já proporcionada na inicialização do MotiFinding
+        """
         score = 0
-        motif = self.createMotifFromIndexes(s)
-        motif.doCounts()
-        mat = motif.counts
-        for j in range(len(mat[0])):
+        motif = self.createMotifFromIndexes(s)  # o objeto MyMotifs é atribuido a motif
+        motif.doCounts()  # função da classe MyMotifs
+        mat = motif.counts  # a matriz de contagem dos motifs 
+        for j in range(len(mat[0])):  # itera sobre todas as colunas
             maxcol = mat[0][j]
-            for  i in range(1, len(mat)):
-                if mat[i][j] > maxcol: 
-                    maxcol = mat[i][j]
-            score += maxcol
+            for i in range(1, len(mat)):  # itera sobre as linhas
+                if mat[i][j] > maxcol:  # e para dentro da mesma coluna, vê todas as linhas para ver qual dos nucleotidos aparece mais vezes
+                    maxcol = mat[i][j]  # quando encontrar o maior valor,
+            score += maxcol  # vai adicionar ao score
         return score
 
 
     def scoreMult(self, s):
+        """
+        Igual a função score, só que em vez de se somar os consecutivos scores, multiplicam-se
+        """
         score = 1.0
         motif = self.createMotifFromIndexes(s)
         motif.createPWM()
