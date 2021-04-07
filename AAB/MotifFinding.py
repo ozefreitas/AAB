@@ -264,19 +264,19 @@ class MotifFinding:
 
     # Consensus (heuristic estocastico) with pseudo 
 
-    def heuristicStochastic_pseudo(self):
+    def heuristicStochastic_pseudo(self):  # igual a anterior
         from random import randint
         s = [0] * len(self.seqs)
         for i in range(len(self.seqs)):
             s[i] = randint(0, self.seqSize(i) - self.motifSize)
-        bestscore = self.pseudo_score(s)
+        bestscore = self.pseudo_score(s)  # muda o metodo de score, para passar a calcular o score de acordo com a matriz de pseudo-contagem
         improve = True
         while improve:
             motif = self.createMotifFromIndexes(s)
-            motif.createPWM_pseudo()
+            motif.createPWM_pseudo()  # cria a PWM a partir das pseudocontagens
             for i in range(len(self.seqs)):
                 s[i] = motif.mostProbableSeq(self.seqs[i])
-            scr = self.pseudo_score(s)
+            scr = self.pseudo_score(s)  # a mesma coisa que em cima
             if scr > bestscore:
                 bestscore = scr
             else:
@@ -294,23 +294,20 @@ class MotifFinding:
         bestscore = self.pseudo_score(s)  # faz o score de s com as posições aleatórias 
         i = 0
         while i <= n:
-            seq_idx = randint(0, len(self.seqs) - 1)  # escolher uma das sequencias aleatoriamente
-            # seqs = self.seqs.copy()  # copiar para uma nova variavel as sequencias fornecidas
-            igno_seq = self.seqs.pop(seq_idx)  # remover a sequencia selecionada e atribuila a uma variavel, assim, self.seqs ficará apenas com 4 sequencias
-            #print(self.seqs)
-            #print(igno_seq)
-            s.pop(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
-            motif = self.createMotifFromIndexes(s)  # fazer os motifs para as restantes sequencias em self.seqs, de acordo com os indices restantes em s_partial
-            motif.createPWM_pseudo()  # fazer a pwm e ver o consenso
-            probs = motif.probAllPositions(igno_seq)  # devolve uma lista de sequencias com as probabilidades de todas as subsquencias 
-            new_ind = self.roulette(probs)  # a função roulet escolhe um indice de acordo com as probabilidades de cada posiçao inicial obtida pela função anterior
-            self.seqs.insert(seq_idx, igno_seq)  # adicionamos novamente e no mesmo local, a sequencia que foi retirada antes
-            s.insert(seq_idx, new_ind)  # adiciona-se agora, tambem no mesmo local de onde foi retirado o valor de inicio do motif, o novo indice que vem da roulette
-            sc = self.pseudo_score(s)  # faz novamente o score para o novo vetor de posições inicias
-            if sc > bestscore:  # se esse score for melhor que o anterior
-                bestscore = sc  # atualiza-se o melhor score
-                vector = s  # e o vetor de posições iniciais correspondente é dado a uma variavel
-            i += 1  # continua-se o ciclo até ao fim das iteações que foi dado
+            seq_idx = randint(0, len(self.seqs) - 1)
+            igno_seq = self.seqs.pop(seq_idx)
+            s.pop(seq_idx)  
+            motif = self.createMotifFromIndexes(s) 
+            motif.createPWM_pseudo()  # passa a usar a pseudo pwm para depois fazer as probabilidades
+            probs = motif.probAllPositions(igno_seq) 
+            new_ind = self.roulette(probs)  
+            self.seqs.insert(seq_idx, igno_seq) 
+            s.insert(seq_idx, new_ind)  
+            sc = self.pseudo_score(s)  
+            if sc > bestscore: 
+                bestscore = sc 
+                vector = s  
+            i += 1  
         return vector
 
 # tests
@@ -358,13 +355,13 @@ def test3():
 def test4():
     mf = MotifFinding()
     mf.readFile("c:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt","dna")
-    # print("Heuristic stochastic")
-    # sol = mf.heuristicStochastic()
-    # print ("Solution: " , sol)
-    # print ("Score:" , mf.score(sol))
-    # print ("Score mult:" , mf.scoreMult(sol))
-    # print ("Consensus:", mf.createMotifFromIndexes(sol).consensus())
-    
+    print("Heuristic stochastic")
+    sol = mf.heuristicStochastic()
+    print ("Solution: " , sol)
+    print ("Score:" , mf.score(sol))
+    print ("Score mult:" , mf.scoreMult(sol))
+    print ("Consensus:", mf.createMotifFromIndexes(sol).consensus())
+    print()
     print("Gibbs sampling:")
     sol2 = mf.gibbs(1000)
     print ("Score:" , mf.score(sol2))
@@ -376,10 +373,10 @@ def test5():
     print("Heuristic stochastic with pseudo matrix")
     sol = mf.heuristicStochastic_pseudo()
     print ("Solution: " , sol)
-    print ("Score:" , mf.score(sol))
+    print ("Score:" , mf.pseudo_score(sol))
     print ("Score mult:" , mf.scoreMult(sol))
     print ("Consensus:", mf.createMotifFromIndexes(sol).consensus())
-
+    print()
     #print("Gibbs sampling with pseudo matrix:")
     #sol2 = mf.gibbs(1000)
     #print ("Score:" , mf.score(sol2))
@@ -389,5 +386,5 @@ def test5():
 #test1()
 #test2()
 #test3()
-test4()
+#test4()
 #test5()
