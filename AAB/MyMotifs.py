@@ -16,21 +16,24 @@ class MyMotifs:
 
     def __init__(self, seqs):  # fornece-se um conjunto de subsequencias para construir os perfis (PWM e consensos)
         self.size = len(seqs[0])
-        self.seqs = seqs # objetos classe MySeq
+        self.seqs = seqs  # objetos classe MySeq
         self.alphabet = seqs[0].alfabeto()
         self.doCounts()
         self.createPWM()
-        
+
+
     def __len__ (self):
-        return self.size        
-        
+        return self.size
+
+
     def doCounts(self):
         self.counts = createMatZeros(len(self.alphabet), self.size)  # cria uma matriz so com zeros de acordo com o tamanho das sequencias e alfabeto 
         for s in self.seqs:
             for i in range(self.size):  # vai preenchendo a matriz de acordo com as ocorrencias de cada nucleoido em cada posição das sequencias 
                 lin = self.alphabet.index(s[i])
                 self.counts[lin][i] += 1
-                
+
+
     def createPWM(self):
         if self.counts == None: 
             self.doCounts()
@@ -38,18 +41,20 @@ class MyMotifs:
         for i in range(len(self.alphabet)):
             for j in range(self.size):
                 self.pwm[i][j] = float(self.counts[i][j]) / len(self.seqs)
-                
+
+
     def consensus(self):
         res = ""
         for j in range(self.size):
             maxcol = self.counts[0][j]
             maxcoli = 0
-            for i in range(1, len(self.alphabet) ):
+            for i in range(1, len(self.alphabet)):
                 if self.counts[i][j] > maxcol: 
                     maxcol = self.counts[i][j]
                     maxcoli = i
             res += self.alphabet[maxcoli]        
         return res
+
 
     def maskedConsensus(self):
         res = ""
@@ -66,18 +71,21 @@ class MyMotifs:
                 res += "-"
         return res
 
+
     def probabSeq (self, seq):  # calcula a probablidade de uma sequencia de acordo com a pwm
         res = 1.0
         for i in range(self.size):
             lin = self.alphabet.index(seq[i])
             res *= self.pwm[lin][i]
         return res
-    
+
+
     def probAllPositions(self, seq):
         res = []
         for k in range(len(seq)-self.size+1):
             res.append(self.probabSeq(seq))
         return res
+
 
     def mostProbableSeq(self, seq):
         maximo = -1.0
@@ -88,6 +96,7 @@ class MyMotifs:
                 maximo = p
                 maxind = k
         return maxind
+
 
 def test():
     # test

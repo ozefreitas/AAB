@@ -206,10 +206,10 @@ class MotifFinding:
 
     def gibbs (self):
         from random import randint
-        s = [0] * len(self.seqs)
+        s = [0] * len(self.seqs)  # vetor de posições iniciais so com zeros
         for i in range(len(self.seqs)):
             s[i] = randint(0, self.seqSize(i)-self.motifSize)
-        seq_idx = (0, len(self.seqs)-1)
+        seq_idx = randint(0, len(self.seqs)-1)
         seq = self.seqs.pop(seq_idx)
         s_partial = s.copy().remove(seq_idx)
         motif = self.createMotifFromIndexes(s_partial)
@@ -229,6 +229,41 @@ class MotifFinding:
             acum += (f[ind] + 0.01)
             ind += 1
         return ind-1
+
+
+    def heuristicStochastic_pseudo (self):
+        from random import randint
+        s = [0] * len(self.seqs)
+        for i in range(len(self.seqs)):
+            s[i] = randint(0, self.seqSize(i)-self.motifSize)
+        bestscore = self.score(s)
+        improve = True
+        while improve:
+            motif = self.createMotifFromIndexes(s)
+            motif.createPWM()
+            for i in range(len(self.seqs)):
+                s[i] = motif.mostProbableSeq(self.seqs[i])
+            scr = self.score(s)
+            if scr > bestscore:
+                bestscore = scr
+            else:
+                improve = False
+        return s
+
+    # Gibbs sampling 
+
+    def gibbs_pseudo (self):
+        from random import randint
+        s = [0] * len(self.seqs)  # vetor de posições iniciais so com zeros
+        for i in range(len(self.seqs)):
+            s[i] = randint(0, self.seqSize(i)-self.motifSize)
+        seq_idx = randint(0, len(self.seqs)-1)
+        seq = self.seqs.pop(seq_idx)
+        s_partial = s.copy().remove(seq_idx)
+        motif = self.createMotifFromIndexes(s_partial)
+        motif.createPWM()
+        s[seq_idx] = motif.mostProbableSeq(seq)
+        return s
 
 # tests
 
