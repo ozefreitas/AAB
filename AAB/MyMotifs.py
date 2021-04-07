@@ -102,7 +102,7 @@ class MyMotifs:
 
     def probAllPositions(self, seq):
         res = []
-        for k in range(len(seq)-self.size+1):
+        for k in range(len(seq) - self.size + 1):
             res.append(self.probabSeq(seq))
         return res
 
@@ -111,7 +111,7 @@ class MyMotifs:
         maximo = -1.0
         maxind = -1
         for k in range(len(seq)-self.size):
-            p = self.probabSeq(seq[k:k+ self.size])
+            p = self.probabSeq(seq[k : k + self.size])
             if(p > maximo):
                 maximo = p
                 maxind = k

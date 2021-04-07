@@ -76,7 +76,7 @@ class SuffixTree_2Seq:
                     newnode = self.nodes[node][2][k]
                     leafes = self.get_leafes_below(newnode)
                     res2.extend(leafes)
-        return res1, res2
+        return res1
 
 
     def nodes_below(self, node):
@@ -96,9 +96,9 @@ class SuffixTree_2Seq:
         res = []  # lista de simbolos que aparecem depois do nó especificado
         newnode = 0
         if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
-            for sym, no in self.nodes[node][2].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
+            for sym, no in self.nodes[node][2].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer
                 res.append(sym)  # adiciona imediatamente o primero simbolo que vê
-                newnode = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)   
+                newnode = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)
                 if self.nodes[newnode][0] >= 0:  # quando chegar a folha
                     continue
                 else:

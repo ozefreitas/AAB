@@ -66,7 +66,7 @@ class SuffixTreeMultiSeq:
 
 def test():
     lst = ["TACAG", "TACTG", "AGTCG", "CTAGC"]
-    lst2 = ["$", "#", "*", "%", "&"]
+    lst2 = ["$", "#", "*", "%"]
     st = SuffixTreeMultiSeq(lst, lst2)
     st.suffix_tree_from_seq()
     st.print_tree()

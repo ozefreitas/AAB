@@ -173,7 +173,7 @@ def test4():
 
 #test()
 #test2()
-test3()
+#test3()
 #test4()
 
 # 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18}

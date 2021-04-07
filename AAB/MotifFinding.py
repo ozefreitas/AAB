@@ -202,36 +202,39 @@ class MotifFinding:
 
     def heuristicStochastic (self):
         from random import randint
-        s = [0] * len(self.seqs)
+        s = [0] * len(self.seqs)  # vetor de posições iniciais
         for i in range(len(self.seqs)):
-            s[i] = randint(0, self.seqSize(i) - self.motifSize)
-        bestscore = self.score(s)
+            s[i] = randint(0, self.seqSize(i) - self.motifSize)  # preenche o vetor com posições aleatorias
+        bestscore = self.score(s)  # a função score cria os motifs e a matriz de contagem e assim faz o score para o vetor criado aleatoriamente
         improve = True
-        while improve:
-            motif = self.createMotifFromIndexes(s)
-            motif.createPWM()
-            for i in range(len(self.seqs)):
-                s[i] = motif.mostProbableSeq(self.seqs[i])
-            scr = self.score(s)
-            if scr > bestscore:
-                bestscore = scr
+        while improve:  # enquanto improve for True
+            motif = self.createMotifFromIndexes(s)  # cria os motifs a partir do vetor de posições iniciais
+            motif.createPWM()  # faz a PWM de acordo com os motifs criados
+            for i in range(len(self.seqs)):  # para todas as sequencias 
+                s[i] = motif.mostProbableSeq(self.seqs[i])  # ve qual o segmento mais provavel em cada uma de acordo com a PWM, e muda a posição incial dessa sequencia para a posição encontrada
+            scr = self.score(s)  # calcula o score desse segmento
+            if scr > bestscore:  # se esse score for melhor que o anterior
+                bestscore = scr  # passa a ser o melhor score
             else:
-                improve = False
+                improve = False  # quando o score não aumentar, improve passa a ser False e o ciclo acaba
         return s
 
     # Gibbs sampling 
 
-    def gibbs (self):
+    def gibbs (self, n):  # n é o numero de iterações
         from random import randint
         s = [0] * len(self.seqs)  # vetor de posições iniciais so com zeros
         for i in range(len(self.seqs)):
             s[i] = randint(0, self.seqSize(i) - self.motifSize)  # criar vetor de posições iniciais aleatorias
-        seq_idx = randint(0, len(self.seqs) - 1)  # escolher uma das sequencias aleatoriamente
-        seq = self.seqs.pop(seq_idx)   # remover a sequencia selecionada
-        s_partial = s.copy().remove(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
-        motif = self.createMotifFromIndexes(s_partial)  # fazer os motifs para as restantes sequencias de acordos com os indices restantes
-        motif.createPWM()  # fazer a pwm e ver o consenso 
-        s[seq_idx] = motif.mostProbableSeq(seq)  # na sequencia que foi ignorada, ver a probabilidade do consenso criado pelas outras aparecer em cada posição
+        while i <= n:
+            seq_idx = randint(0, len(self.seqs) - 1)  # escolher uma das sequencias aleatoriamente
+            seq = self.seqs.pop(seq_idx)   # remover a sequencia selecionada
+            s_partial = s.copy().remove(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
+            motif = self.createMotifFromIndexes(s_partial)  # fazer os motifs para as restantes sequencias de acordos com os indices restantes
+            motif.createPWM()  # fazer a pwm e ver o consenso
+            s[seq_idx] = motif.mostProbableSeq(seq)  # na sequencia que foi ignorada, ver a probabilidade do consenso criado pelas outras aparecer em cada posição
+            # e alterar no vetor de posições iniciais para o valor encontrado no indice da sequencia que foi ignorada
+            i += 1
         return s
 
 
@@ -246,7 +249,7 @@ class MotifFinding:
         while acum < val:
             acum += (f[ind] + 0.01)
             ind += 1
-        return ind-1
+        return ind - 1
 
     # Consensus (heuristic estocastico) with pseudo 
 
