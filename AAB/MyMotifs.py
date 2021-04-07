@@ -35,14 +35,14 @@ class MyMotifs:
 
 
     def doCounts_pseudo(self):
-        self.counts_pseudo = createMatZeros(len(self.alphabet), self.size)  # cria uma nova matriz de 0
-        for i in range(len(self.counts_pseudo)):
-            for j in range(len(self.counts_pseudo[0])):  # percorre esta nova matriz toda
-                self.counts_pseudo[i][j] += 1  # e adiciona 1 a todos os elementos
+        self.counts = createMatZeros(len(self.alphabet), self.size)  # cria uma nova matriz de 0
+        for i in range(len(self.counts)):
+            for j in range(len(self.counts[0])):  # percorre esta nova matriz toda
+                self.counts[i][j] += 1  # e adiciona 1 a todos os elementos
         for s in self.seqs:
             for i in range(self.size):  # vai preenchendo a matriz de acordo com as ocorrencias de cada nucleoido em cada posição das sequencias
                 lin = self.alphabet.index(s[i])
-                self.counts_pseudo[lin][i] += 1
+                self.counts[lin][i] += 1
 
 
     def createPWM(self):
@@ -55,12 +55,12 @@ class MyMotifs:
 
 
     def createPWM_pseudo(self):
-        if self.counts_pseudo == None: 
+        if self.counts == None: 
             self.doCounts_pseudo()
-        self.pwm_pseudo = createMatZeros(len(self.alphabet), self.size)
+        self.pwm = createMatZeros(len(self.alphabet), self.size)
         for i in range(len(self.alphabet)):
             for j in range(self.size):
-                self.pwm_pseudo[i][j] = float(self.counts_pseudo[i][j]) / len(self.seqs)
+                self.pwm[i][j] = float(self.counts[i][j]) / len(self.seqs)
 
 
     def consensus(self):
@@ -131,15 +131,15 @@ def test():
     seq8 = MySeq("GAACCT")
     lseqs = [seq1, seq2, seq3, seq4, seq5, seq6, seq7, seq8]
     motifs = MyMotifs(lseqs)
-    motifs.doCounts_pseudo()
-    printMat(motifs.counts_pseudo)
+    printMat(motifs.counts)
     print()
+    motifs.doCounts_pseudo()
     printMat(motifs.counts)
     print()
     printMat(motifs.pwm)
     print()
     motifs.createPWM_pseudo()
-    printMat(motifs.pwm_pseudo)
+    printMat(motifs.pwm)
     #print(motifs.alphabet)
     print()
     print(motifs.probabSeq("AAACCT"))

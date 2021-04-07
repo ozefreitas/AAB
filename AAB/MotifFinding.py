@@ -62,6 +62,23 @@ class MotifFinding:
         return score
 
 
+    def pseudo_score(self, s):
+        """
+        Igual a função score mas calcula este de acordo com a matriz de pseudo-contagem
+        """
+        score = 0
+        motif = self.createMotifFromIndexes(s)  # o objeto MyMotifs é atribuido a motif
+        motif.doCounts_pseudo()  # função da classe MyMotifs
+        mat = motif.counts  # a matriz de pseudo-contagem dos motifs 
+        for j in range(len(mat[0])):  # itera sobre todas as colunas
+            maxcol = mat[0][j]
+            for i in range(1, len(mat)):  # itera sobre as linhas
+                if mat[i][j] > maxcol:  # e para dentro da mesma coluna, vê todas as linhas para ver qual dos nucleotidos aparece mais vezes
+                    maxcol = mat[i][j]  # quando encontrar o maior valor,
+            score += maxcol  # vai adicionar ao score
+        return score
+
+
     def scoreMult(self, s):
         """
         Igual a função score, só que em vez de se somar os consecutivos scores, multiplicam-se
@@ -132,14 +149,14 @@ class MotifFinding:
     def bypass (self, s): # s é o mesmo que nextvertex
         res =  []
         pos = len(s) -1
-        while pos >=0 and s[pos] == self.seqSize(pos) - self.motifSize:
+        while pos >= 0 and s[pos] == self.seqSize(pos) - self.motifSize:
             pos -= 1
         if pos < 0: 
             res = None 
         else:
             for i in range(pos): 
                 res.append(s[i])
-            res.append(s[pos]+1)
+            res.append(s[pos] + 1)
         return res
 
 
@@ -147,7 +164,7 @@ class MotifFinding:
         melhorScore = -1
         melhorMotif = None
         size = len(self.seqs)
-        s = [0]*size  # no inicio será (0,0,0)
+        s = [0] * size  # no inicio será (0,0,0)
         while s is not None:
             if len(s) < size:  # a partir dai vai avaliar segundo o bypass, quando chegar a conclusao que o contributo dado pelas folhas
                 optimScore = self.score(s) + (size-len(s)) * self.motifSize
@@ -159,7 +176,7 @@ class MotifFinding:
                 sc = self.score(s)
                 if sc > melhorScore:
                     melhorScore = sc
-                    melhorMotif  = s
+                    melhorMotif = s
                 s = self.nextVertex(s)
         return melhorMotif
 
@@ -172,7 +189,7 @@ class MotifFinding:
             s.append(0)
             melhorScore = -1
             melhorposicao = 0
-            for j in range(self.seqSize(i)-self.motifSize+1):
+            for j in range(self.seqSize(i) - self.motifSize + 1):
                 s[i] = j  # adiciona a sequencia seguinte para a poder comparar com o consenso das primeiras
                 scoreatual = self.score(s)  # faz o score 
                 if scoreatual > melhorScore:  # se o score melhorar
@@ -187,7 +204,7 @@ class MotifFinding:
         from random import randint
         s = [0] * len(self.seqs)
         for i in range(len(self.seqs)):
-            s[i] = randint(0, self.seqSize(i)-self.motifSize)
+            s[i] = randint(0, self.seqSize(i) - self.motifSize)
         bestscore = self.score(s)
         improve = True
         while improve:
@@ -208,8 +225,8 @@ class MotifFinding:
         from random import randint
         s = [0] * len(self.seqs)  # vetor de posições iniciais so com zeros
         for i in range(len(self.seqs)):
-            s[i] = randint(0, self.seqSize(i)-self.motifSize)  # criar vetor de posições iniciais aleatorias
-        seq_idx = randint(0, len(self.seqs)-1)  # escolher uma das sequencias aleatoriamente
+            s[i] = randint(0, self.seqSize(i) - self.motifSize)  # criar vetor de posições iniciais aleatorias
+        seq_idx = randint(0, len(self.seqs) - 1)  # escolher uma das sequencias aleatoriamente
         seq = self.seqs.pop(seq_idx)   # remover a sequencia selecionada
         s_partial = s.copy().remove(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
         motif = self.createMotifFromIndexes(s_partial)  # fazer os motifs para as restantes sequencias de acordos com os indices restantes
@@ -237,15 +254,15 @@ class MotifFinding:
         from random import randint
         s = [0] * len(self.seqs)
         for i in range(len(self.seqs)):
-            s[i] = randint(0, self.seqSize(i)-self.motifSize)
-        bestscore = self.score(s)
+            s[i] = randint(0, self.seqSize(i) - self.motifSize)
+        bestscore = self.pseudo_score(s)
         improve = True
         while improve:
             motif = self.createMotifFromIndexes(s)
-            motif.createPWM()
+            motif.createPWM_pseudo()
             for i in range(len(self.seqs)):
                 s[i] = motif.mostProbableSeq(self.seqs[i])
-            scr = self.score(s)
+            scr = self.pseudo_score(s)
             if scr > bestscore:
                 bestscore = scr
             else:
@@ -258,8 +275,8 @@ class MotifFinding:
         from random import randint
         s = [0] * len(self.seqs)  # vetor de posições iniciais so com zeros
         for i in range(len(self.seqs)):
-            s[i] = randint(0, self.seqSize(i)-self.motifSize)
-        seq_idx = randint(0, len(self.seqs)-1)
+            s[i] = randint(0, self.seqSize(i) - self.motifSize)
+        seq_idx = randint(0, len(self.seqs) - 1)
         seq = self.seqs.pop(seq_idx)
         s_partial = s.copy().remove(seq_idx)
         motif = self.createMotifFromIndexes(s_partial)
@@ -323,7 +340,18 @@ def test4():
     #print ("Score:" , mf.score(sol2))
     #print ("Score mult:" , mf.scoreMult(sol2))
 
+def test5():
+    mf = MotifFinding()
+    mf.readFile("c:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt","dna")
+    print("Heuristic stochastic")
+    sol = mf.heuristicStochastic_pseudo()
+    print ("Solution: " , sol)
+    print ("Score:" , mf.pseudo_score(sol))
+    print ("Score mult:" , mf.scoreMult(sol))
+    print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
+
 #test1()
 #test2()
 #test3()
 #test4()
+#test5()
