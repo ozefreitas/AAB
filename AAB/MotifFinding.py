@@ -200,7 +200,7 @@ class MotifFinding:
 
     # Consensus (heuristic estocastico)
 
-    def heuristicStochastic (self):
+    def heuristicStochastic(self):
         from random import randint
         s = [0] * len(self.seqs)  # vetor de posições iniciais
         for i in range(len(self.seqs)):
@@ -221,11 +221,13 @@ class MotifFinding:
 
     # Gibbs sampling 
 
-    def gibbs (self, n):  # n é o numero de iterações
+    def gibbs(self, n):  # n é o numero de iterações
         from random import randint
         s = [0] * len(self.seqs)  # vetor de posições iniciais so com zeros
         for i in range(len(self.seqs)):
             s[i] = randint(0, self.seqSize(i) - self.motifSize)  # criar vetor de posições iniciais aleatorias
+        vector = s  # variavel que vai receber o vetor de posições iniciais com o melhor score mais tarde
+        bestscore = self.score(s)  # faz o score de s com as posições aleatórias 
         i = 0
         while i <= n:
             seq_idx = randint(0, len(self.seqs) - 1)  # escolher uma das sequencias aleatoriamente
@@ -233,17 +235,19 @@ class MotifFinding:
             igno_seq = self.seqs.pop(seq_idx)  # remover a sequencia selecionada e atribuila a uma variavel, assim, self.seqs ficará apenas com 4 sequencias
             #print(self.seqs)
             #print(igno_seq)
-            s_partial = s.copy()
-            s_partial.pop(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
-            #print(s_partial)
-            motif = self.createMotifFromIndexes(s_partial)  # fazer os motifs para as restantes sequencias em self.seqs, de acordo com os indices restantes em s_partial
+            s.pop(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
+            motif = self.createMotifFromIndexes(s)  # fazer os motifs para as restantes sequencias em self.seqs, de acordo com os indices restantes em s_partial
             motif.createPWM()  # fazer a pwm e ver o consenso
-            probs = motif.probAllPositions(igno_seq)
-            new_ind = self.roulette(probs)
-            self.seqs.insert(seq_idx, igno_seq)
-            s_partial.insert(seq_idx, new_ind)
-            i += 1
-        return s
+            probs = motif.probAllPositions(igno_seq)  # devolve uma lista de sequencias com as probabilidades de todas as subsquencias 
+            new_ind = self.roulette(probs)  # a função roulet escolhe um indice de acordo com as probabilidades de cada posiçao inicial obtida pela função anterior
+            self.seqs.insert(seq_idx, igno_seq)  # adicionamos novamente e no mesmo local, a sequencia que foi retirada antes
+            s.insert(seq_idx, new_ind)  # adiciona-se agora, tambem no mesmo local de onde foi retirado o valor de inicio do motif, o novo indice que vem da roulette
+            sc = self.score(s)  # faz novamente o score para o novo vetor de posições inicias
+            if sc > bestscore:  # se esse score for melhor que o anterior
+                bestscore = sc  # atualiza-se o melhor score
+                vector = s  # e o vetor de posições iniciais correspondente é dado a uma variavel
+            i += 1  # continua-se o ciclo até ao fim das iteações que foi dado
+        return vector
 
 
     def roulette(self, f):
@@ -261,7 +265,7 @@ class MotifFinding:
 
     # Consensus (heuristic estocastico) with pseudo 
 
-    def heuristicStochastic_pseudo (self):
+    def heuristicStochastic_pseudo(self):
         from random import randint
         s = [0] * len(self.seqs)
         for i in range(len(self.seqs)):
