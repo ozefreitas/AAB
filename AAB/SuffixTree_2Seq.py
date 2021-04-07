@@ -3,7 +3,7 @@
 class SuffixTree_2Seq:
     
     def __init__(self):
-        self.nodes = { 0:(-1, -1,{}) } # {root node:(numero da sequencia 0 ou 1, se for nó será -1, {simbolo: nó seguinte})}
+        self.nodes = { 0:(-1, -1,{}) } # {root node:(numero da sequencia 0 ou 1 (-1 default é sempre substituido), se for nó será -1, {simbolo: nó seguinte})}
         self.num = 0
         self.seq1 = ""
         self.seq2 = ""
@@ -93,14 +93,14 @@ class SuffixTree_2Seq:
     def nodes_below_symb(self, node):
         res = []  # lista de simbolos que aparecem depois do nó especificado
         newnode = 0
-        if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
+        if self.nodes[node][1] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
             for sym, no in self.nodes[node][2].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
                 res.append(sym)  # adiciona imediatamente o primero simbolo que vê
                 newnode = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)   
-                if self.nodes[newnode][0] >= 0:  # quando chegar a folha
+                if self.nodes[newnode][1] >= 0:  # quando chegar a folha
                     continue
                 else:
-                    while self.nodes[newnode][0] < 0:  # enquanto for um nó
+                    while self.nodes[newnode][1] < 0:  # enquanto for um nó
                         for symb in self.nodes[newnode][2].keys():  # este nó agora é analisado, sendo que symb toma o simbolo que está nesse nó
                             res.append(symb)  # adicona-se o simbolo
                         newnode = self.nodes[newnode][2][symb]  # passa-se para o proximo nó
@@ -118,7 +118,7 @@ class SuffixTree_2Seq:
                     if self.seq1[x:x+c] == self.seq2[y:y+c]:  # se os caracteres fruto deste splicing forem iguais de uma seq para a outra
                         if len(subseq) <= len(self.seq1[x:x+c]):  # e se o tamanho desse for maior ou igual que o tamanho da subsequencia já gravada
                             subseq = self.seq1[x:x+c]  # subsquencia comum passa a ser essa
-                    c += 1  # vai correr até que o tamanho da janela supere o tamanha de uma das sequencias
+                    c += 1  # vai correr até que o tamanho da janela supere o tamanho de uma das sequencias
         return subseq
 
 
@@ -155,10 +155,9 @@ def test4():
     print(st.largestCommonSubstring())
 
 #test()
-#print()
 #test2()
 #test3()
-test4()
+#test4()
 
 
 # 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18, 'G': 28, '#': 34}
