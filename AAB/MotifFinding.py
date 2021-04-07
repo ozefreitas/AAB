@@ -198,7 +198,7 @@ class MotifFinding:
                 s[i] = melhorposicao  # adiciona esse indice ao vetor de posições iniciais
         return s
 
-    # Consensus (heuristic)
+    # Consensus (heuristic estocastico)
 
     def heuristicStochastic (self):
         from random import randint
@@ -248,7 +248,7 @@ class MotifFinding:
             ind += 1
         return ind-1
 
-    # Consensus (heuristic) with pseudo 
+    # Consensus (heuristic estocastico) with pseudo 
 
     def heuristicStochastic_pseudo (self):
         from random import randint
@@ -280,7 +280,7 @@ class MotifFinding:
         seq = self.seqs.pop(seq_idx)
         s_partial = s.copy().remove(seq_idx)
         motif = self.createMotifFromIndexes(s_partial)
-        motif.createPWM()
+        motif.createPWM_pseudo()
         s[seq_idx] = motif.mostProbableSeq(seq)
         return s
 
@@ -336,6 +336,7 @@ def test4():
     print ("Score mult:" , mf.scoreMult(sol))
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
     
+    #print("Gibbs sampling:")
     #sol2 = mf.gibbs(1000)
     #print ("Score:" , mf.score(sol2))
     #print ("Score mult:" , mf.scoreMult(sol2))
@@ -343,15 +344,21 @@ def test4():
 def test5():
     mf = MotifFinding()
     mf.readFile("c:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt","dna")
-    print("Heuristic stochastic")
+    print("Heuristic stochastic with pseudo matrix")
     sol = mf.heuristicStochastic_pseudo()
     print ("Solution: " , sol)
     print ("Score:" , mf.pseudo_score(sol))
     print ("Score mult:" , mf.scoreMult(sol))
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
 
+    #print("Gibbs sampling with pseudo matrix:")
+    #sol2 = mf.gibbs(1000)
+    #print ("Score:" , mf.score(sol2))
+    #print ("Score mult:" , mf.scoreMult(sol2))
+
+
 #test1()
 #test2()
 #test3()
-#test4()
+test4()
 #test5()
