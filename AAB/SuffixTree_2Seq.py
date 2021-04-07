@@ -45,38 +45,36 @@ class SuffixTree_2Seq:
 
 
     def find_pattern(self, pattern):
-        pos = 0
         node = 0
+        res1 = []
+        res2 = []
         for pos in range(len(pattern)):
             if pattern[pos] in self.nodes[node][2].keys():
                 node = self.nodes[node][2][pattern[pos]]
             else:
                 return None
-        return self.get_leafes_below(node)
+            if self.nodes[node][0] == 0:
+                res1.append(self.get_leafes_below(node))
+            else:
+                res2.append(self.get_leafes_below(node))
+        return res1, res2
 
 
     def get_leafes_below(self, node):
-        res1 = []  # posicoes onde ocorre o padrao na primeira sequencia
-        res2 = []  # posicoes onde ocorre o padrao na segunda sequencia
-        if self.nodes[node][1] >=0:  # se esse no, no primeiro elemento do tuplo nao tiver -1, quer dizer que é uma folha, e que encontramos o padrao
-            if self.nodes[node][0] == 0:  # verifica no tuplo do dicionario nodes a qual das sequencias corresponde
-                res1.append(self.nodes[node][1]) # por isso podemos adicionar o valor desse tuplo, que corresponde ao indice de onde começa o sufixo na sequencia (o valor na folha é exatamente isso)
-            else:
-                res2.append(self.nodes[node][1])
-        else: # para o caso de o nó que veio da função find_pattern e que iniciou esta função, ainda ser um nó, 
-            # e por isso tem que se continuar a percorrer a arvore, de forma a chegar a folha desse ramo e 
-            # podermos saber qual o valor associado a essa folha e consequentemente o indice do sufixo 
-            if self.nodes[node][0] == 0:  # para o caso de ser a sequencia 1
-                for k in self.nodes[node][2].keys():
-                    newnode = self.nodes[node][2][k]
-                    leafes = self.get_leafes_below(newnode)  # recursividade, volta a correr esta função ate ver que o novo nó passa a ser uma folha
-                    res1.extend(leafes)
-            else:  # para o caso de ser a sequencia 2
-                for k in self.nodes[node][2].keys():
-                    newnode = self.nodes[node][2][k]
-                    leafes = self.get_leafes_below(newnode)
-                    res2.extend(leafes)
-        return res1
+        res = [] #posicoes onde ocorre o padrao
+        # print(node)
+        if self.nodes[node][1] >= 0:  # se esse no, no primeiro elemento do tuplo nao tiver um valor positivo ou zero, quer dizer que é uma folha, e que encontramos o padrao
+            # print(node)
+            res.append(self.nodes[node][1]) # por isso podemos adicionar o valor desse tuplo, que corresponde ao indice de onde começa o sufixo na sequencia
+            # print(res)
+        else:  # se o no que veio da função find_pattern ainda nao for uma folha
+            for k in self.nodes[node][2].keys():  # k vai tomar o(s) simbolo(s) para o nó atual  
+                newnode = self.nodes[node][2][k]  # e o value correspondente ao simbolo de cima, será o proximo nó
+                
+                leafes = self.get_leafes_below(newnode)  # e vai correr novamente esta função para esse nó, até encontrar um valor negativo, que representa a folha
+                res.extend(leafes)
+                # print(res)
+        return res
 
 
     def nodes_below(self, node):
@@ -96,9 +94,9 @@ class SuffixTree_2Seq:
         res = []  # lista de simbolos que aparecem depois do nó especificado
         newnode = 0
         if self.nodes[node][0] < 0:  # tem que ser um nó, ou seja o primeiro elemento do tuplo tem que ser -1
-            for sym, no in self.nodes[node][2].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer
+            for sym, no in self.nodes[node][2].items():  # sym vai tomar os simbolos que estao nesse nó, e no vai tomar os nos que estao a seguir do no que se quer 
                 res.append(sym)  # adiciona imediatamente o primero simbolo que vê
-                newnode = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)
+                newnode = no  # o proximo no a ser visto será o que esta logo a seguir (que é o que esta associado ao simbolo)   
                 if self.nodes[newnode][0] >= 0:  # quando chegar a folha
                     continue
                 else:
@@ -156,11 +154,11 @@ def test4():
     st.print_tree()
     print(st.largestCommonSubstring())
 
-test()
+#test()
 #print()
 #test2()
 #test3()
-#test4()
+test4()
 
 
 # 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18, 'G': 28, '#': 34}

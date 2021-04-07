@@ -55,13 +55,17 @@ class SuffixTree:
 
     def get_leafes_below(self, node):
         res = [] #posicoes onde ocorre o padrao
-        if self.nodes[node][0] >=0:  # se esse no, no primeiro elemento do tuplo nao tiver um valor positivo ou zero, quer dizer que é uma folha, e que encontramos o padrao
+        print(node)
+        if self.nodes[node][0] >= 0:  # se esse no, no primeiro elemento do tuplo nao tiver um valor positivo ou zero, quer dizer que é uma folha, e que encontramos o padrao
+            # print(node)
             res.append(self.nodes[node][0]) # por isso podemos adicionar o valor desse tuplo, que corresponde ao indice de onde começa o sufixo na sequencia
+            print(res)
         else:  # se o no que veio da função find_pattern ainda nao for uma folha
-            for k in self.nodes[node][1].keys():  # k vai tomar o simbolo para o nó atual  
+            for k in self.nodes[node][1].keys():  # k vai tomar o(s) simbolo(s) para o nó atual  
                 newnode = self.nodes[node][1][k]  # e o value correspondente ao simbolo de cima, será o proximo nó
                 leafes = self.get_leafes_below(newnode)  # e vai correr novamente esta função para esse nó, até encontrar um valor negativo, que representa a folha
                 res.extend(leafes)
+                # print(res)
         return res
 
 
@@ -129,6 +133,8 @@ class SuffixTree:
                 node = self.nodes[node][1][prefix[s]]  # o proximo nó será o value correspondente ao simbolo do prefixo que se acabou de ver
                 if len(st) == len(prefix):  # quando virmos que o st está com o mesmo tamanho que o prefixo
                     res.append(st)  # podemos adicionar a lista resultado
+            else:
+                return None
         for x in range(len(prefix), len(self.sequence)):  # agora queremos correr o resto que falta ate ao fim da sequencia 
             if self.sequence[x] in self.nodes[node][1].keys():  # o simbolo x da sequencia irá estar no nó seguinte, que ficou guardado anteriormente
                 st += self.sequence[x]  # e concatena se esse simbolo a st
@@ -169,12 +175,12 @@ def test4():
     st = SuffixTree()
     st.suffix_tree_from_seq(seq)
     #st.print_tree()    
-    print(st.matches_prefix("AC"))
+    print(st.matches_prefix("TA"))
 
 #test()
 #test2()
 #test3()
-#test4()
+test4()
 
 # 0 -> {'T': 1, 'A': 7, 'C': 12, '$': 18}
 # 1 -> {'A': 2}

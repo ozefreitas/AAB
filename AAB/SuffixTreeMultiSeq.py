@@ -3,7 +3,7 @@
 class SuffixTreeMultiSeq:
     
     def __init__(self, seqlist, finishchars):
-        self.nodes = { 0:(-1, -1,{}) }  # {root node:(numero da sequencia 0 ou 1, se for nó será -1, {simbolo: nó seguinte})}
+        self.nodes = { 0:(-1, -1,{}) }  # {root node:(numero da sequencia entre 0 e numero de sequencia dadas - 1, se for nó será -1, {simbolo: nó seguinte})}
         self.num = 0  # contador de nós
         self.seqs = seqlist  # lista de sequencias para construir a arvore de sufixos
         self.char = finishchars  # lista de caracteres de terminação, que cada um corresponde à sequencia com o mesmo indice em seqlist
@@ -41,7 +41,7 @@ class SuffixTreeMultiSeq:
                 self.add_suffix(sequence[i:], seq, i)  # i representa a posicao incial do sufixo na sequencia, seq representa o numero da sequencia
 
 
-    def find_pattern(self, pattern):
+    def find_pattern(self, pattern):  # completar
         pos = 0
         node = 0
         for pos in range(len(pattern)):
@@ -52,7 +52,7 @@ class SuffixTreeMultiSeq:
         return self.get_leafes_below(node)
 
 
-    def get_leafes_below(self, node):
+    def get_leafes_below(self, node):  # completar
         res = [] #posicoes onde ocorre o padrao
         if self.nodes[node][0] >=0:  # se esse no, no primeiro elemento do tuplo nao tiver um valor positivo ou zero, quer dizer que é uma folha, e que encontramos o padrao
             res.append(self.nodes[node][0]) # por isso podemos adicionar o valor desse tuplo, que corresponde ao indice de onde começa o sufixo na sequencia
