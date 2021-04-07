@@ -5,7 +5,7 @@ class SuffixTree:
     def __init__(self):
         self.nodes = { 0:(-1,{}) } # {root node:(se for nó será -1, {simbolo: nó seguinte})}
         self.num = 0
-        self.sequence = ""
+        self.sequence = ""  # sequencia que faz a arvore
 
 
     def print_tree(self):
@@ -16,15 +16,16 @@ class SuffixTree:
                 print (k, ":", self.nodes[k][0])
 
 
-    def add_node(self, origin, symbol, leafnum = -1): # mesmo efeito que na trie
+    def add_node(self, origin, symbol, leafnum = -1): 
         self.num += 1
         self.nodes[origin][1][symbol] = self.num  # seleciona-se a posição 2 do tuplo para adicionar no segundo dicionário com o simbolo
         self.nodes[self.num] = (leafnum,{})  # abre o proximo, no caso de ser uma folha, vai ter um novo leafnum que vem da função a baixo, e nao vai ter dicionário interno
 
 
-    def add_suffix(self, p, sufnum):  # mesmo efeito que add_pattern em trie
+    def add_suffix(self, p, sufnum):  # p é cada sufixo que bem do splicing em suffix_tree_from_seq
         no = 0
         for s in range(len(p)):
+            # se este nucleotido ainda não estiver na arvore
             if p[s] not in self.nodes[no][1].keys():  # vai buscar a chave com o valor de s, 
             # dentro desse value (que é um tuplo de um inteiro e um dicionário) 
             # vai buscar a segunda posição e vai dividir por keys (que são simbolos do alfabeto da sequencia)
@@ -36,7 +37,7 @@ class SuffixTree:
    
 
     def suffix_tree_from_seq(self, text):
-        self.sequence = text
+        self.sequence = text  # guarda a sequencia que faz a arvore
         t = text+"$"
         for i in range(len(t)):
             self.add_suffix(t[i:], i)  # adiciona no final da sequencia um "$", e a partir dessa faz a arvore de sufixos com a função add_suffix

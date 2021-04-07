@@ -47,20 +47,20 @@ class MyMotifs:
 
     def createPWM(self):
         if self.counts == None: 
-            self.doCounts()
-        self.pwm = createMatZeros(len(self.alphabet), self.size)
-        for i in range(len(self.alphabet)):
-            for j in range(self.size):
-                self.pwm[i][j] = float(self.counts[i][j]) / len(self.seqs)
+            self.doCounts()  # faz a matriz de contagens caso ainda nao existisse
+        self.pwm = createMatZeros(len(self.alphabet), self.size)  # cria uma nova matriz de zeros com 4 linhas (alfabeto) e numero de colunas correspondente ao tamanha das sequencias
+        for i in range(len(self.alphabet)):  # corre as linhas
+            for j in range(self.size):  # corre as colunas
+                self.pwm[i][j] = float(self.counts[i][j]) / len(self.seqs)  # pega nos valores da correspondentes da matriz de contagem e divide pelo numero total de sequencias, trocando os zeros por esses valores
 
 
     def createPWM_pseudo(self):
         if self.counts == None: 
-            self.doCounts_pseudo()
-        self.pwm = createMatZeros(len(self.alphabet), self.size)
-        for i in range(len(self.alphabet)):
-            for j in range(self.size):
-                self.pwm[i][j] = float(self.counts[i][j]) / len(self.seqs)
+            self.doCounts_pseudo()  # em vez de fazer a matriz de contagens normais, vai fazer a matriz de pseudo contagens
+        self.pwm = createMatZeros(len(self.alphabet), self.size)  # cria uma nova matriz de zeros
+        for i in range(len(self.alphabet)):  # corre as linhas
+            for j in range(self.size):  # corre as colunas
+                self.pwm[i][j] = float(self.counts[i][j]) / len(self.seqs)  # pega nos valores correspondentes de pseudo-contagem e divide pelo numero total de sequencias 
 
 
     def consensus(self):
@@ -92,11 +92,11 @@ class MyMotifs:
         return res
 
 
-    def probabSeq (self, seq):  # calcula a probablidade de uma sequencia de acordo com a pwm
+    def probabSeq (self, seq):  # calcula a probablidade de uma sequencia individual de acordo com a pwm
         res = 1.0
-        for i in range(self.size):
-            lin = self.alphabet.index(seq[i])
-            res *= self.pwm[lin][i]
+        for i in range(self.size):  # itera sobre as posições da sequencia (motif)
+            lin = self.alphabet.index(seq[i])  # de acordo com o alfabeto, vê qual a linha para depois usar na PWM
+            res *= self.pwm[lin][i]  # cada valor é multiplicado pelo anterior
         return res
 
 
@@ -107,12 +107,12 @@ class MyMotifs:
         return res
 
 
-    def mostProbableSeq(self, seq):
+    def mostProbableSeq(self, seq):  # recebe uma sequencia inteira
         maximo = -1.0
         maxind = -1
-        for k in range(len(seq)-self.size):
-            p = self.probabSeq(seq[k : k + self.size])
-            if(p > maximo):
+        for k in range(len(seq) - self.size):  # faz a iteração num range que so vai até ao comprimento da sequencia menos o comprimento do motif
+            p = self.probabSeq(seq[k : k + self.size])  # faz a probabilidade de cada subsquencia ocorrer
+            if(p > maximo):  # devolve o maior valor de probabilidade
                 maximo = p
                 maxind = k
         return maxind
