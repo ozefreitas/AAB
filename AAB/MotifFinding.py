@@ -208,21 +208,22 @@ class MotifFinding:
         from random import randint
         s = [0] * len(self.seqs)  # vetor de posições iniciais so com zeros
         for i in range(len(self.seqs)):
-            s[i] = randint(0, self.seqSize(i)-self.motifSize)
-        seq_idx = randint(0, len(self.seqs)-1)
-        seq = self.seqs.pop(seq_idx)
-        s_partial = s.copy().remove(seq_idx)
-        motif = self.createMotifFromIndexes(s_partial)
-        motif.createPWM()
-        s[seq_idx] = motif.mostProbableSeq(seq)
+            s[i] = randint(0, self.seqSize(i)-self.motifSize)  # criar vetor de posições iniciais aleatorias
+        seq_idx = randint(0, len(self.seqs)-1)  # escolher uma das sequencias aleatoriamente
+        seq = self.seqs.pop(seq_idx)   # remover a sequencia selecionada
+        s_partial = s.copy().remove(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
+        motif = self.createMotifFromIndexes(s_partial)  # fazer os motifs para as restantes sequencias de acordos com os indices restantes
+        motif.createPWM()  # fazer a pwm e ver o consenso 
+        s[seq_idx] = motif.mostProbableSeq(seq)  # na sequencia que foi ignorada, ver a probabilidade do consenso criado pelas outras aparecer em cada posição
         return s
 
 
     def roulette(self, f):
         from random import random
         tot = 0.0
-        for x in f: tot += (0.01+x)
-        val = random()* tot
+        for x in f: 
+            tot += (0.01 + x)
+        val = random() * tot
         acum = 0.0
         ind = 0
         while acum < val:
@@ -230,6 +231,7 @@ class MotifFinding:
             ind += 1
         return ind-1
 
+    # Consensus (heuristic) with pseudo 
 
     def heuristicStochastic_pseudo (self):
         from random import randint
@@ -250,7 +252,7 @@ class MotifFinding:
                 improve = False
         return s
 
-    # Gibbs sampling 
+    # Gibbs sampling with pseudo 
 
     def gibbs_pseudo (self):
         from random import randint
