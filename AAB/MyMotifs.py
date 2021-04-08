@@ -46,8 +46,7 @@ class MyMotifs:
 
 
     def createPWM(self):
-        if self.counts == None: 
-            self.doCounts()  # faz a matriz de contagens caso ainda nao existisse
+        self.doCounts()  # faz a matriz de contagens sem ser pseudo, para trocar caso a que estava guardada anterirormente fosse a de pseudo ontagens
         self.pwm = createMatZeros(len(self.alphabet), self.size)  # cria uma nova matriz de zeros com 4 linhas (alfabeto) e numero de colunas correspondente ao tamanha das sequencias
         for i in range(len(self.alphabet)):  # corre as linhas
             for j in range(self.size):  # corre as colunas
@@ -55,8 +54,7 @@ class MyMotifs:
 
 
     def createPWM_pseudo(self):
-        if self.counts == None: 
-            self.doCounts_pseudo()  # em vez de fazer a matriz de contagens normais, vai fazer a matriz de pseudo contagens
+        self.doCounts_pseudo()  # em vez de fazer a matriz de contagens normais, vai fazer a matriz de pseudo contagens
         self.pwm = createMatZeros(len(self.alphabet), self.size)  # cria uma nova matriz de zeros
         for i in range(len(self.alphabet)):  # corre as linhas
             for j in range(self.size):  # corre as colunas
@@ -136,6 +134,7 @@ def test():
     motifs.doCounts_pseudo()
     printMat(motifs.counts)
     print()
+    motifs.createPWM()
     printMat(motifs.pwm)
     print()
     #motifs.createPWM_pseudo()
