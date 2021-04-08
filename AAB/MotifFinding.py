@@ -205,12 +205,12 @@ class MotifFinding:
             s.append(0)
             melhorScore = -1
             melhorposicao = 0
-            for j in range(self.seqSize(i) - self.motifSize + 1):
-                s[i] = j  # adiciona a sequencia seguinte para a poder comparar com o consenso das primeiras
-                scoreatual = self.score(s)  # faz o score 
+            for j in range(self.seqSize(i) - self.motifSize + 1):  # vai correr as posições da sequencia i até ao comprimento do motif
+                s[i] = j  # adiciona essa posição ao vetor de posições iniciais
+                scoreatual = self.score(s)  # faz o score para o vetor em cada momento
                 if scoreatual > melhorScore:  # se o score melhorar
                     melhorScore = scoreatual  # o melhor score passa a ser esse
-                    melhorposicao = j  # e o indice respetivo
+                    melhorposicao = j  # e o indice respetivo de onde começa essa subsquencia na sequencia i
                 s[i] = melhorposicao  # adiciona esse indice ao vetor de posições iniciais
         return s
 
@@ -252,7 +252,7 @@ class MotifFinding:
             #print(self.seqs)
             #print(igno_seq)
             s.pop(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
-            motif = self.createMotifFromIndexes(s)  # fazer os motifs para as restantes sequencias em self.seqs, de acordo com os indices restantes em s_partial
+            motif = self.createMotifFromIndexes(s)  # fazer os motifs para as restantes sequencias em self.seqs, de acordo com os indices restantes em s
             motif.createPWM()  # fazer a pwm para depois poder fazer as probabilidades de todas as subsquencias do tamanho do motif
             probs = motif.probAllPositions(igno_seq)  # devolve uma lista de sequencias com as probabilidades de todas as subsquencias 
             new_ind = self.roulette(probs)  # a função roulet escolhe um indice de acordo com as probabilidades de cada posiçao inicial obtida pela função anterior
