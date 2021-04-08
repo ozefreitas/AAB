@@ -95,6 +95,23 @@ class MotifFinding:
             score *= maxcol
         return score     
 
+
+    def pseudo_scoreMult(self, s):
+        """
+        Igual a função scoreMult mas calcula este de acordo com a PWM de pseudo contagem
+        """
+        score = 1.0
+        motif = self.createMotifFromIndexes(s)
+        motif.createPWM_pseudo()
+        mat = motif.pwm  # matriz PWM proveniente da matriz de pseudo contagens
+        for j in range(len(mat[0])):
+            maxcol = mat[0][j]
+            for  i in range(1, len(mat)):
+                if mat[i][j] > maxcol: 
+                    maxcol = mat[i][j]
+            score *= maxcol
+        return score   
+
     # EXHAUSTIVE SEARCH
 
     def nextSol (self, s):  # vai iterar sobre o vetor de posicoes inciais 
@@ -370,21 +387,21 @@ def test4():
 def test5():
     mf = MotifFinding()
     mf.readFile("c:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt","dna")
-    print("Heuristic stochastic with pseudo matrix")
+    print("Heuristic stochastic with pseudo matrix:")
     sol = mf.heuristicStochastic_pseudo()
     print ("Solution: " , sol)
     print ("Score:" , mf.pseudo_score(sol))
-    print ("Score mult:" , mf.scoreMult(sol))
+    print ("Score mult:" , mf.pseudo_scoreMult(sol))
     print ("Consensus:", mf.createMotifFromIndexes(sol).consensus())
     print()
     #print("Gibbs sampling with pseudo matrix:")
     #sol2 = mf.gibbs(1000)
-    #print ("Score:" , mf.score(sol2))
-    #print ("Score mult:" , mf.scoreMult(sol2))
+    #print ("Score:" , mf.pseudo_score(sol2))
+    #print ("Score mult:" , mf.pseudo_scoreMult(sol2))
 
 
 #test1()
 #test2()
 #test3()
-test4()
+#test4()
 #test5()
