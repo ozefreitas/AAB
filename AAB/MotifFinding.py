@@ -236,7 +236,7 @@ class MotifFinding:
             #print(igno_seq)
             s.pop(seq_idx)  # retirar do vetor de posições o valor da posição inicial que seria para a sequencia retirada
             motif = self.createMotifFromIndexes(s)  # fazer os motifs para as restantes sequencias em self.seqs, de acordo com os indices restantes em s_partial
-            motif.createPWM()  # fazer a pwm e ver o consenso
+            motif.createPWM()  # fazer a pwm para depois poder fazer as probabilidades de todas as subsquencias do tamanho do motif
             probs = motif.probAllPositions(igno_seq)  # devolve uma lista de sequencias com as probabilidades de todas as subsquencias 
             new_ind = self.roulette(probs)  # a função roulet escolhe um indice de acordo com as probabilidades de cada posiçao inicial obtida pela função anterior
             self.seqs.insert(seq_idx, igno_seq)  # adicionamos novamente e no mesmo local, a sequencia que foi retirada antes
@@ -386,5 +386,5 @@ def test5():
 #test1()
 #test2()
 #test3()
-#test4()
+test4()
 #test5()

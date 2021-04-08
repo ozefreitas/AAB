@@ -100,10 +100,10 @@ class MyMotifs:
         return res
 
 
-    def probAllPositions(self, seq):
+    def probAllPositions(self, seq):  # recebe uma sequencia inteira
         res = []
-        for k in range(len(seq) - self.size + 1):
-            res.append(self.probabSeq(seq))
+        for k in range(len(seq) - self.size + 1):  
+            res.append(self.probabSeq(seq[k : k + self.size]))  # ESTAVA ERRADO, não estava a fazer o splicing da sequencia, nem iteração para fazer avançar a janela
         return res
 
 
@@ -138,12 +138,13 @@ def test():
     print()
     printMat(motifs.pwm)
     print()
-    motifs.createPWM_pseudo()
-    printMat(motifs.pwm)
+    #motifs.createPWM_pseudo()
+    #printMat(motifs.pwm)
     #print(motifs.alphabet)
     print()
     print(motifs.probabSeq("AAACCT"))
     print(motifs.probabSeq("ATACAG"))
+    print(motifs.probAllPositions("CTATAAACCTTACATC"))
     print(motifs.mostProbableSeq("CTATAAACCTTACATC"))
     
     print(motifs.consensus())
