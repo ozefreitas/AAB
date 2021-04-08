@@ -110,7 +110,7 @@ class MotifFinding:
                 if mat[i][j] > maxcol: 
                     maxcol = mat[i][j]
             score *= maxcol
-        return score   
+        return score
 
     # EXHAUSTIVE SEARCH
 
@@ -243,7 +243,7 @@ class MotifFinding:
         for i in range(len(self.seqs)):
             s[i] = randint(0, self.seqSize(i) - self.motifSize)  # criar vetor de posições iniciais aleatorias
         vector = s  # variavel que vai receber o vetor de posições iniciais com o melhor score mais tarde
-        bestscore = self.score(s)  # faz o score de s com as posições aleatórias 
+        bestscore = self.score(s)  # faz o score de s com as posições iniciais aleatórias 
         i = 0
         while i <= n:
             seq_idx = randint(0, len(self.seqs) - 1)  # escolher uma das sequencias aleatoriamente
@@ -394,10 +394,10 @@ def test5():
     print ("Score mult:" , mf.pseudo_scoreMult(sol))
     print ("Consensus:", mf.createMotifFromIndexes(sol).consensus())
     print()
-    #print("Gibbs sampling with pseudo matrix:")
-    #sol2 = mf.gibbs(1000)
-    #print ("Score:" , mf.pseudo_score(sol2))
-    #print ("Score mult:" , mf.pseudo_scoreMult(sol2))
+    print("Gibbs sampling with pseudo matrix:")
+    sol2 = mf.gibbs(1000)
+    print ("Score:" , mf.pseudo_score(sol2))
+    print ("Score mult:" , mf.pseudo_scoreMult(sol2))
 
 
 #test1()

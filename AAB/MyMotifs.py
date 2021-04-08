@@ -95,7 +95,7 @@ class MyMotifs:
         for i in range(self.size):  # itera sobre as posições da sequencia (motif)
             lin = self.alphabet.index(seq[i])  # de acordo com o alfabeto, vê qual a linha para depois usar na PWM
             res *= self.pwm[lin][i]  # cada valor é multiplicado pelo anterior
-        return res
+        return res  # é a probabilidade da subsequencia fornecida ter sido gerada pelo perfil da pwm
 
 
     def probAllPositions(self, seq):  # recebe uma sequencia inteira
@@ -105,7 +105,7 @@ class MyMotifs:
         return res
 
 
-    def SumprobAllPositions(self, seq):
+    def SumprobAllPositions(self, seq):  # soma todas as probabilidades da lista que vem de proALLPositions
         res = self.probAllPositions(seq)
         soma = 0
         for x in res:
