@@ -45,7 +45,7 @@ class EvolAlgorithm:
 
 
 def test():
-    ea = EvolAlgorithm(100, 20, 50, 10)
+    ea = EvolAlgorithm(100, 80, 50, 50)
     ea.run()
 
 

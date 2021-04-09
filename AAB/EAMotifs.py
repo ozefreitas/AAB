@@ -50,7 +50,7 @@ class EAMotifsReal (EvolAlgorithm):
 
 
 def test1():
-    ea = EAMotifsInt(100, 1000, 50, "exemploMotifs.txt")
+    ea = EAMotifsInt(100, 1000, 50, "C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
 
