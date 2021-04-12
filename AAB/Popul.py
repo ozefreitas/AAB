@@ -14,8 +14,10 @@ class Popul:  # conjunto de individuos
         else:  # se não for, vai ser criado aleatoriamente
             self.initRandomPop()
 
+
     def getIndiv(self, index):  # vai buscar individuos por indice na lista
         return self.indivs[index]
+
 
     def initRandomPop(self):
         self.indivs = []  # so se vai fazer para quando nao houver individuos
@@ -23,6 +25,7 @@ class Popul:  # conjunto de individuos
             indiv_i = Indiv(self.indsize, [])  # por cada iteração, vai criar um objeto Indiv com o tamanho já estipulado no incio da classe Popul, 
             # sem atribuir o parametro genes, para dessa forma criar um individuo aleatorio na classe Indiv
             self.indivs.append(indiv_i)  # adiciona-se cada novo individuo a variável
+
 
     def getFitnesses(self, indivs=None):  # vai buscar os valores de aptidao para todos os individuos
         fitnesses = []
@@ -32,8 +35,10 @@ class Popul:  # conjunto de individuos
             fitnesses.append(ind.getFitness())
         return fitnesses
 
+
     def bestSolution(self): 
         return max(self.indivs)
+
 
     def bestFitness(self):  # devolve o melhor valor de aptidão 
         indv = self.bestSolution()
@@ -50,6 +55,7 @@ class Popul:  # conjunto de individuos
             res.append(sel)  # e adiciona o indice do individuo selecionado
         return res
 
+
     def roulette(self, f):
         tot = sum(f)
         val = random()
@@ -60,6 +66,7 @@ class Popul:  # conjunto de individuos
             ind += 1
         return ind-1
 
+
     def linscaling(self, fitnesses):
         mx = max(fitnesses)
         mn = min(fitnesses)
@@ -68,6 +75,7 @@ class Popul:  # conjunto de individuos
             val = (f-mn)/(mx-mn)
             res.append(val)
         return res
+
 
     def recombination(self, parents, noffspring):  # parents são os individuos que foram selecionados no processo de seleção
         offspring = []  # descendente
@@ -82,6 +90,7 @@ class Popul:  # conjunto de individuos
             offspring.append(offsp2)  # e estes novos individuos vao ser adicionados a uma lista que os detem todos
             new_inds += 2  # por cada iteração vai aumentar 2, pq estão sempre aos pares
         return offspring
+
 
     def reinsertion(self, offspring):  # mecanismo que tem a ver com a selacao dos inividuos que vao constitui a população seguinte 
         tokeep = self.selection(self.popsize-len(offspring))  # com a roleta seleciona individuos da população anterior que vao ser mantidos
@@ -98,6 +107,7 @@ class PopulInt(Popul):
         self.ub = ub
         Popul.__init__(self, popsize, indsize, indivs)
 
+
     def initRandomPop(self):
         self.indivs = []
         for _ in range(self.popsize):
@@ -108,9 +118,13 @@ class PopulInt(Popul):
 class PopulReal(Popul):
 
     def __init__(self, popsize, indsize, lb=0.0, ub=1.0, indivs=[]):
-        # completar
-        pass
+        self.lb = lb
+        self.ub = ub
+        Popul.__init__(self, popsize, indsize, indivs)
+
 
     def initRandomPop(self):
-        # completar
-        pass
+        self.indivs = []
+        for _ in range(self.popsize):
+            indiv_i = IndivReal(self.indsize, [], lb=self.lb, ub=self.ub)
+            self.indivs.append(indiv_i)

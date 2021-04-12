@@ -78,6 +78,7 @@ class MotifFinding:
             score += maxcol  # vai adicionar ao score
         return score
 
+
     def scoreMult(self, s):
         """
         Igual a função score, só que em vez de se somar os consecutivos scores, multiplicam-se

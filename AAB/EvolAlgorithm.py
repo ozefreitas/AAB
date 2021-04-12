@@ -1,4 +1,4 @@
-from Popul import Popul
+from Popul import Popul, PopulInt, PopulReal
 
 
 class EvolAlgorithm:  
@@ -11,7 +11,7 @@ class EvolAlgorithm:
 
 
     def initPopul(self, indsize):  # responsável pela geração da população incial
-        self.popul = Popul(self.popsize, indsize)
+        self.popul = PopulInt(self.popsize, indsize, 50)
 
 
     def evaluate(self, indivs):
@@ -52,8 +52,9 @@ class EvolAlgorithm:
 
 
 def test():
-    ea = EvolAlgorithm(100, 80, 50, 50)
+    ea = EvolAlgorithm(100, 1000, 20, 5)
     ea.run()
+    ea.printBestSolution()
 
 
 if __name__ == "__main__":

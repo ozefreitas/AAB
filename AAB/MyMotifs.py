@@ -14,12 +14,17 @@ def printMat(mat):
 
 class MyMotifs:
 
-    def __init__(self, seqs):  # fornece-se um conjunto de subsequencias para construir os perfis (PWM e consensos)
-        self.size = len(seqs[0])
-        self.seqs = seqs  # objetos classe MySeq
-        self.alphabet = seqs[0].alfabeto()
-        self.doCounts()
-        self.createPWM()
+    def __init__(self, seqs=[], pwm=[], alphabet=None):  # fornece-se um conjunto de subsequencias para construir os perfis (PWM e consensos)
+        if seqs:
+            self.size = len(seqs[0])
+            self.seqs = seqs  # objetos classe MySeq
+            self.alphabet = seqs[0].alfabeto()
+            self.doCounts()
+            self.createPWM()
+        else:
+            self.pwm = pwm
+            self.size = len(pwm[0])
+            self.alphabet = alphabet
 
 
     def __len__ (self):
