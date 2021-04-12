@@ -55,11 +55,11 @@ def test1():
     ea.printBestSolution()
 
 
-def test2():
-    ea = EAMotifsReal(100, 2000, 50, "exemploMotifs.txt", 2)
-    ea.run()
-    ea.printBestSolution()
+# def test2():
+    # ea = EAMotifsReal(100, 2000, 50, "exemploMotifs.txt", 2)
+    # ea.run()
+    # ea.printBestSolution()
 
 
-test1()
+#test1()
 # test2()

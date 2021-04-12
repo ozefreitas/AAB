@@ -5,7 +5,7 @@
 
 def createMatZeros (nl, nc):
     res = [ ] 
-    for i in range(0, nl):
+    for _ in range(0, nl):
         res.append([0]*nc)
     return res
 
@@ -58,7 +58,7 @@ class MyMotifs:
         self.pwm = createMatZeros(len(self.alphabet), self.size)  # cria uma nova matriz de zeros
         for i in range(len(self.alphabet)):  # corre as linhas
             for j in range(self.size):  # corre as colunas
-                self.pwm[i][j] = float(self.counts[i][j]) / len(self.seqs)  # pega nos valores correspondentes de pseudo-contagem e divide pelo numero total de sequencias 
+                self.pwm[i][j] = float(self.counts[i][j]) / (len(self.seqs) + len(self.alphabet)) # pega nos valores correspondentes de pseudo-contagem e divide pelo numero total de sequencias 
 
 
     def consensus(self):
