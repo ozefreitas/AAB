@@ -248,7 +248,6 @@ class MotifFinding:
         i = 0
         while i <= n:
             seq_idx = randint(0, len(self.seqs) - 1)  # escolher uma das sequencias aleatoriamente
-            # seqs = self.seqs.copy()  # copiar para uma nova variavel as sequencias fornecidas
             igno_seq = self.seqs.pop(seq_idx)  # remover a sequencia selecionada e atribuila a uma variavel, assim, self.seqs ficará apenas com 4 sequencias
             #print(self.seqs)
             #print(igno_seq)

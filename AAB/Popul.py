@@ -123,7 +123,7 @@ class PopulReal(Popul):
         Popul.__init__(self, popsize, indsize, indivs)
 
 
-    def initRandomPop(self):
+    def initRandomPop(self):  # override
         self.indivs = []
         for _ in range(self.popsize):
             indiv_i = IndivReal(self.indsize, [], lb=self.lb, ub=self.ub)

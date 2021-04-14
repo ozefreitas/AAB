@@ -110,16 +110,18 @@ class IndivInt (Indiv):
 class IndivReal(Indiv):
 
     def __init__(self, size, genes=[], lb=0, ub=1):  # neste caso já podemos alterar os valores de lower e upper bound para os que quisermos
+        # self.lb = lb  ## faltava guadar as lb e ub para usar nas duas funções seguintes ???????
+        # self.ub = ub
         Indiv.__init__(size, genes, lb, ub)
 
 
-    def initRandom(self, size):
+    def initRandom(self, size):  # override
         self.genes = []
         for _ in range(size):
             self.genes.append(uniform(self.lb, self.ub))
         
 
-    def mutation(self):
+    def mutation(self):  # override
         s = len(self.genes)
         pos = randint(0, s-1)
         self.genes[pos] = uniform(self.lb, self.ub)

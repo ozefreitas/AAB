@@ -52,7 +52,7 @@ class EvolAlgorithm:
 
 
 def test():
-    ea = EvolAlgorithm(100, 1000, 20, 5)
+    ea = EvolAlgorithm(100, 1000, 80, 50)
     ea.run()
     ea.printBestSolution()
 
