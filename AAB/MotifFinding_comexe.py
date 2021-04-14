@@ -40,7 +40,7 @@ class MotifFinding:
         for i,ind in enumerate(indexes):  # i toma o indice para fazer a iteração das sequencias, e ind toma os valores de posições iniciais
             pseqs.append( MySeq(self.seqs[i][ind:(ind+self.motifSize)], self.seqs[i].tipo) )   # por cada valor presente no vetor
             # vai buscar a sequencia correspondente, e dentro dessa dar slice à subsequencia do tamanho do motif especificado ao inicio
-        return MyMotifs(pseqs)  # cria um objeto MyMotifs com os motifs resultantes
+        return MyMotifs(seqs=pseqs)  # cria um objeto MyMotifs com os motifs resultantes
 
     # SCORES
 

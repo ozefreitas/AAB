@@ -44,8 +44,8 @@ class EAMotifsInt(EvolAlgorithm):
 class EAMotifsReal(EvolAlgorithm):
 
     def __init__(self, popsize, numits, noffspring, filename):
-        self.motifs = MotifFinding()
-        self.motifs.readFile(filename, "dna")
+        self.motifs = MotifFinding()  # inicialização do metodo MotifFinding
+        self.motifs.readFile(filename, "dna")  # automaticamente guarda as sequencias
         # print(self.motifs.seqs)
         indsize = self.motifs.motifSize * len(self.motifs.alphabet)  # o tamanho dos individuos será um vetor do tamanho da pwm, ou seja, tamanho do motif (coluans) * tamanho do alfabeto (linhas)
         # print(indsize)  que depois será usado para construir a propria pwm com a função vec_to_pwm
@@ -64,7 +64,7 @@ class EAMotifsReal(EvolAlgorithm):
         tam_motif = self.motifs.motifSize
         pwm = createMatZeros(tam_alfabeto, tam_motif)  # criar uma matriz de zeros de acordo com os paramtros que vem da classe MotifFinding
         for i in range(0, len(v), tam_alfabeto):  # correr o vetor com incrementos do tamanho do alfabeto
-            col_idx = i / tam_alfabeto  # o indice da coluna irá incrementar 1 a 1
+            col_idx = int(i / tam_alfabeto)  # o indice da coluna irá incrementar 1 a 1, int para poder ser um indice da matriz
             col = v[i : i + tam_alfabeto]  # dar splice aos elementos do vetor do tamanho do alfabeto
             soma = sum(col)  # soma dos elementos retirados do vetor
             for j in range(tam_alfabeto):  # j será a linha da pwm
@@ -73,30 +73,31 @@ class EAMotifsReal(EvolAlgorithm):
 
 
     def evaluate(self, indivs):
-        for i in range(len(indivs)):
+        for i in range(len(indivs)):  # para cada individuo
             ind = indivs[i]
             sol = ind.getGenes()
-            self.motifs.pwm = self.vec_to_pwm(sol)
-            s = []
-            for seq in self.motifs.seqs:
-                prob = self.motifs.mostProbableSeq(seq)  # ????? esta função pertence a MyMotifs, a qual nunca é inicializada ????
-                s.append(prob)
-            fit = self.motifs.score(s)
-            ind.setFitness(fit)
+            self.motifs.pwm = self.vec_to_pwm(sol)  # construir a pwm a partir do vetor, que é atribuida a self.motifs.pwm
+            n = MyMotifs(pwm=self.motifs.pwm, alphabet=self.motifs.alphabet)  # inicializar a classe MyMotifs para poder fazer as probabilidades 
+            s = []  # vetor de posições iniciais
+            for seq in self.motifs.seqs:  # para cada sequencia que está guardada
+                prob = n.mostProbableSeq(seq)  # calcular o indice onde começa a sequencia mais provavel de acordo com a pwm
+                s.append(prob)  # adicionar esse indice ao vetor de posições iniciais
+            fit = self.motifs.score(s)  # ver qual o score 
+            ind.setFitness(fit)  # associar esse socre ao individuo
 
     ### Usar score multiplicativo sem atualizar a pwm
 
-    def evaluate_mult(self, indivs):
-        for i in range(len(indivs)):
-            ind = indivs[i]
-            sol = ind.getGenes()
-            self.motifs.pwm = self.vec_to_pwm(sol)
-            s = []
-            for seq in self.motifs.seqs:
-                prob = self.motifs.mostProbableSeq(seq)
-                s.append(prob)
-            fit = self.motifs.scoreMult(s)
-            ind.setFitness(fit)
+#    def evaluate_mult(self, indivs):
+#        for i in range(len(indivs)):
+#            ind = indivs[i]
+#            sol = ind.getGenes()
+#            self.motifs.pwm = self.vec_to_pwm(sol)
+#            s = []
+#            for seq in self.motifs.seqs:
+#                prob = self.motifs.mostProbableSeq(seq)  # ????? esta função pertence a MyMotifs, a qual nunca é inicializada ????
+#                s.append(prob)
+#            fit = self.motifs.scoreMult(s)
+#            ind.setFitness(fit)
 
 
 def test1():
@@ -111,5 +112,5 @@ def test2():
     ea.printBestSolution()
 
 
-test1()
+#test1()
 #test2()
