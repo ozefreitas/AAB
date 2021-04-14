@@ -1,7 +1,7 @@
 from EvolAlgorithm import EvolAlgorithm
 from Popul import PopulInt, PopulReal
-from MotifFinding import MotifFinding
-from MyMotifs import MyMotifs
+from MotifFinding_comexe import MotifFinding
+from MyMotifs_comexe import MyMotifs
 
 
 def createMatZeros(nl, nc):

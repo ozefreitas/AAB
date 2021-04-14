@@ -4,7 +4,7 @@
 """
 
 from MySeq import MySeq
-from MyMotifs import MyMotifs
+from MyMotifs_comexe import MyMotifs
 
 class MotifFinding:
     
