@@ -8,6 +8,7 @@ class Indiv:
         self.ub = ub  # intervalo de valores que cada gene pode ter
         self.genes = genes  # caracteristicas do indivduo, representação da solução
         self.fitness = None  # guarda os valores de aptidão
+        self.multifitness = None  # guarda os valores de aptidão calculados com o score multiplo
         if not self.genes:
             self.initRandom(size)
 
@@ -50,6 +51,12 @@ class Indiv:
 
     def getFitness(self):
         return self.fitness
+
+    def setMultiFitness(self, fit):
+        self.multifitness = fit
+
+    def getMiltiFitness(self):
+        return self.multifitness
 
     def getGenes(self):
         return self.genes

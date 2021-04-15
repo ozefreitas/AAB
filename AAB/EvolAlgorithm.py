@@ -47,8 +47,9 @@ class EvolAlgorithm:
 
 
     def printBestSolution(self):
-        print("Best solution: ", self.bestsol.getGenes())
+        print("Best solution:", self.bestsol.getGenes())
         print("Best fitness:", self.bestsol.getFitness())
+        print("Best fitness:", self.bestsol.getMiltiFitness())
 
 
 def test():
