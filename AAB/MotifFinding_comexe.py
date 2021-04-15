@@ -79,7 +79,7 @@ class MotifFinding:
         return score
 
 
-    def scoreMult(self, s, pwm = None):
+    def scoreMult(self, s, pwm = None):  # pwm é None por default
         """
         Igual a função score, só que em vez de se somar os consecutivos scores, multiplicam-se
         Usa a PWM, ou seja, a frequencia de cada nucleotido a dividir pelo numero de sequencias 
@@ -87,7 +87,7 @@ class MotifFinding:
         score = 1.0
         motif = self.createMotifFromIndexes(s)
         mat = pwm  # matriz pwm fornecida
-        if pwm is None:
+        if pwm is None:  # só irá criar uma nova pwm caso nao seja fornecida
             motif.createPWM()
             mat = motif.pwm  # matriz PWM
         for j in range(len(mat[0])):

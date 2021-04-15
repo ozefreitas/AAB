@@ -61,7 +61,7 @@ class EAMotifsReal(EvolAlgorithm):
                               maxvalue, [])  # faltava a lower bound
 
 
-    def vec_to_pwm(self, v):  # v é o vetor de um "individuo", pelo que para tansformar numa pwm 
+    def vec_to_pwm(self, v):  # v é o vetor de um "individuo", pelo que para tansformar numa pwm:
         tam_alfabeto = len(self.motifs.alphabet)
         tam_motif = self.motifs.motifSize
         pwm = createMatZeros(tam_alfabeto, tam_motif)  # criar uma matriz de zeros de acordo com os paramtros que vem da classe MotifFinding
@@ -93,36 +93,36 @@ class EAMotifsReal(EvolAlgorithm):
         return maxind
 
 
-    def evaluate(self, indivs):
-        for i in range(len(indivs)):  # para cada individuo
-            ind = indivs[i]
-            sol = ind.getGenes()
-            self.motifs.pwm = self.vec_to_pwm(sol)  # construir a pwm a partir do vetor, que é atribuida a self.motifs.pwm
-            # n = MyMotifs(pwm=self.motifs.pwm, alphabet=self.motifs.alphabet)  # inicializar a classe MyMotifs com a pwm criada antes para poder fazer as probabilidades 
-            s = []  # vetor de posições iniciais
-            for seq in self.motifs.seqs:  # para cada sequencia que está guardada
-                prob = self.mostProbableSeq(seq)  # calcular o indice onde começa a sequencia mais provavel de acordo com a pwm
-                s.append(prob)  # adicionar esse indice ao vetor de posições iniciais
-            fit = self.motifs.score(s)  # ver qual o score 
-            multifit = self.motifs.scoreMult(s, self.motifs.pwm)  # não queremos que a pwm seja atualizada ao fazer o score, por isso dá-mos como parametro a pwm que acabamos de criar atraves da função vec_to_pwm
-            ind.setFitness(fit)  # associar esse socre ao individuo
-            ind.setMultiFitness(multifit)
-
-
 #    def evaluate(self, indivs):
 #        for i in range(len(indivs)):  # para cada individuo
 #            ind = indivs[i]
 #            sol = ind.getGenes()
 #            self.motifs.pwm = self.vec_to_pwm(sol)  # construir a pwm a partir do vetor, que é atribuida a self.motifs.pwm
-#            n = MyMotifs(pwm=self.motifs.pwm, alphabet=self.motifs.alphabet)  # inicializar a classe MyMotifs com a pwm criada antes para poder fazer as probabilidades 
 #            s = []  # vetor de posições iniciais
 #            for seq in self.motifs.seqs:  # para cada sequencia que está guardada
-#                prob = n.mostProbableSeq(seq)  # calcular o indice onde começa a sequencia mais provavel de acordo com a pwm
+#                prob = self.mostProbableSeq(seq)  # calcular o indice onde começa a sequencia mais provavel de acordo com a pwm
 #                s.append(prob)  # adicionar esse indice ao vetor de posições iniciais
 #            fit = self.motifs.score(s)  # ver qual o score 
 #            multifit = self.motifs.scoreMult(s, self.motifs.pwm)  # não queremos que a pwm seja atualizada ao fazer o score, por isso dá-mos como parametro a pwm que acabamos de criar atraves da função vec_to_pwm
 #            ind.setFitness(fit)  # associar esse socre ao individuo
 #            ind.setMultiFitness(multifit)
+
+
+    def evaluate(self, indivs):
+        for i in range(len(indivs)):  # para cada individuo
+            ind = indivs[i]  # atribuir a ind cada individuo
+            sol = ind.getGenes()  # retira os "genes" desse individuo, que neste caso sao os valores que vao compor a pwm
+            self.motifs.pwm = self.vec_to_pwm(sol)  # construir a pwm a partir do vetor, que é atribuida a self.motifs.pwm, que na classe MotifFinding é self.pwm
+            n = MyMotifs(pwm=self.motifs.pwm, alphabet=self.motifs.alphabet)  # inicializar a classe MyMotifs com a pwm criada e alfabeto antes para poder fazer as probabilidades 
+            s = []  # vetor de posições iniciais
+            for seq in self.motifs.seqs:  # para cada sequencia que está guardada
+                prob = n.mostProbableSeq(seq)  # calcular o indice onde começa a sequencia mais provavel de acordo com a self.pwm guardada, e que vem da função vec_to_pwm
+                s.append(prob)  # adicionar esse indice ao vetor de posições iniciais
+            fit = self.motifs.score(s)  # ver qual o score 
+            ind.setFitness(fit)  # associar esse score ao individuo
+            ### Calcular o score multiplicativo sem atualizar a pwm
+            multifit = self.motifs.scoreMult(s, self.motifs.pwm)  # não queremos que a pwm seja atualizada ao fazer o score multiplo, por isso dá-mos como parametro a pwm que acabamos de criar atraves da função vec_to_pwm
+            ind.setMultiFitness(multifit)  # e associamos o valor do score multiplicativo a esse individuo
 
 
 def test1():
@@ -132,7 +132,7 @@ def test1():
 
 
 def test2():
-    ea = EAMotifsReal(100, 2000, 50, "C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt")
+    ea = EAMotifsReal(100, 1000, 50, "C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
 
