@@ -54,7 +54,7 @@ class EAMotifsReal(EvolAlgorithm):
         EvolAlgorithm.__init__(self, popsize, numits, noffspring, indsize)
 
 
-    def initPopul(self, indsize):  # override da funçãoq que está na classe EvolAlgorithm
+    def initPopul(self, indsize):  # override da função que está na classe EvolAlgorithm
         minvalue = 0
         maxvalue = self.motifs.seqSize(0) - self.motifs.motifSize  # a upper bound será o indice máximo que o vetor de posições iniciais pode tomar, ou seja, o tamanho da sequencia menos o tamanho do motif
         self.popul = PopulReal(self.popsize, indsize, minvalue,
@@ -71,6 +71,15 @@ class EAMotifsReal(EvolAlgorithm):
             soma = sum(col)  # soma dos elementos retirados do vetor
             for j in range(tam_alfabeto):  # j será a linha da pwm
                 pwm[j][col_idx] = col[j] / soma  # nessa coluna e para cada linha do tamanho do alfabeto, adicionar o valor correspondente
+#        for c in range(len(pwm[0])):
+#            tot = []
+#            for l in range(len(pwm)):
+#                tot.append(pwm[l][c])         tentativa de normalização dos valores da pwm
+#                if len(tot) == tam_alfabeto:
+#                    mn = min(tot)
+#                    mx = max(tot)
+#                    for L in range(len(pwm)):
+#                        pwm[L][c] = (pwm[L][c] - mn) / (mx - mn)
         return pwm  # e tem-se a pwm
 
 
@@ -116,13 +125,13 @@ class EAMotifsReal(EvolAlgorithm):
             n = MyMotifs(pwm=self.motifs.pwm, alphabet=self.motifs.alphabet)  # inicializar a classe MyMotifs com a pwm criada e alfabeto antes para poder fazer as probabilidades 
             s = []  # vetor de posições iniciais
             for seq in self.motifs.seqs:  # para cada sequencia que está guardada
-                prob = n.mostProbableSeq(seq)  # calcular o indice onde começa a sequencia mais provavel de acordo com a self.pwm guardada, e que vem da função vec_to_pwm
+                prob = n.mostProbableSeq(seq)  # calcular o indice onde começa a sequencia mais provavel de acordo com a pwm que foi fornecida ao inicializar a classe, e que vem da função vec_to_pwm
                 s.append(prob)  # adicionar esse indice ao vetor de posições iniciais
             fit = self.motifs.score(s)  # ver qual o score 
             ind.setFitness(fit)  # associar esse score ao individuo
             ### Calcular o score multiplicativo sem atualizar a pwm
             multifit = self.motifs.scoreMult(s, self.motifs.pwm)  # não queremos que a pwm seja atualizada ao fazer o score multiplo, por isso dá-mos como parametro a pwm que acabamos de criar atraves da função vec_to_pwm
-            ind.setMultiFitness(multifit)  # e associamos o valor do score multiplicativo a esse individuo
+            ind.setMultiFitness(multifit)  # e associamos o valor do score multiplicativo a esse individuo da mesma maneira que se fez para o score 
 
 
 def test1():
