@@ -114,12 +114,12 @@ class IndivInt (Indiv):
         self.genes[pos] = randint(0, self.ub)  # gera um novo número aleatório para ir para essa posição
 
 
-class IndivReal(Indiv):
+class IndivReal(Indiv):  # herda todas as funções de Indiv
 
     def __init__(self, size, genes=[], lb=0, ub=1):  # neste caso já podemos alterar os valores de lower e upper bound para os que quisermos
         self.lb = lb  ## faltava guadar as lb e ub para usar nas duas funções seguintes
         self.ub = ub
-        Indiv.__init__(self, size, genes, lb, ub)
+        Indiv.__init__(self, size, genes, lb, ub)  # faltava um self
 
 
     def initRandom(self, size):  # override

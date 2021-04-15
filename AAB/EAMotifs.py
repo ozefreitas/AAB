@@ -43,7 +43,7 @@ class EAMotifsInt(EvolAlgorithm):
             ind.setMultiFitness(multifit)
 
 
-class EAMotifsReal(EvolAlgorithm):
+class EAMotifsReal(EvolAlgorithm):  # Herda todas as funções de EvolAlgorithm
 
     def __init__(self, popsize, numits, noffspring, filename):
         self.motifs = MotifFinding()  # inicialização do metodo MotifFinding
@@ -71,15 +71,6 @@ class EAMotifsReal(EvolAlgorithm):
             soma = sum(col)  # soma dos elementos retirados do vetor
             for j in range(tam_alfabeto):  # j será a linha da pwm
                 pwm[j][col_idx] = col[j] / soma  # nessa coluna e para cada linha do tamanho do alfabeto, adicionar o valor correspondente
-#        for c in range(len(pwm[0])):
-#            tot = []
-#            for l in range(len(pwm)):
-#                tot.append(pwm[l][c])         tentativa de normalização dos valores da pwm
-#                if len(tot) == tam_alfabeto:
-#                    mn = min(tot)
-#                    mx = max(tot)
-#                    for L in range(len(pwm)):
-#                        pwm[L][c] = (pwm[L][c] - mn) / (mx - mn)
         return pwm  # e tem-se a pwm
 
 
@@ -144,7 +135,7 @@ def test2():
     ea = EAMotifsReal(100, 200, 50, "C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
-
+    print(ea.motifs.pwm)
 
 #test1()
 test2()

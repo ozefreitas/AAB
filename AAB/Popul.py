@@ -115,7 +115,7 @@ class PopulInt(Popul):
             self.indivs.append(indiv_i)
 
 
-class PopulReal(Popul):
+class PopulReal(Popul):  # Herda todas as funções de Popul
 
     def __init__(self, popsize, indsize, lb=0.0, ub=1.0, indivs=[]):
         self.lb = lb
