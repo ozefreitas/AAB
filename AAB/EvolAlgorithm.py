@@ -11,7 +11,7 @@ class EvolAlgorithm:
 
 
     def initPopul(self, indsize):  # responsável pela geração da população incial
-        self.popul = PopulInt(self.popsize, indsize, 50)
+        self.popul = Popul(self.popsize, indsize)
 
 
     def evaluate(self, indivs):

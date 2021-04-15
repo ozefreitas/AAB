@@ -132,7 +132,7 @@ def test1():
 
 
 def test2():
-    ea = EAMotifsReal(100, 1000, 50, "C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt")
+    ea = EAMotifsReal(100, 200, 50, "C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
 
