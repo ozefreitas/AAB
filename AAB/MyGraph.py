@@ -69,6 +69,7 @@ class MyGraph:
                 res.append(key)
         return res
 
+
     def get_adjacents(self, v):
         s = self.get_successors(v)
         p = self.get_predecessors(v)
@@ -88,6 +89,7 @@ class MyGraph:
     def in_degree(self, v):
         return len(self.get_predecessors(v))
 
+
     def degree(self, v):
         return len(self.get_adjacents(v)) 
 
@@ -98,7 +100,8 @@ class MyGraph:
         res = []
         while len(l) > 0:
             node = l.pop(0)
-            if node != v: res.append(node)
+            if node != v: 
+                res.append(node)
             for elem in self.graph[node]:
                 if elem not in res and elem not in l and elem != node:
                     l.append(elem)
@@ -110,7 +113,8 @@ class MyGraph:
         res = []
         while len(l) > 0:
             node = l.pop(0)
-            if node != v: res.append(node)
+            if node != v: 
+                res.append(node)
             s = 0
             for elem in self.graph[node]:
                 if elem not in res and elem not in l:
@@ -120,13 +124,15 @@ class MyGraph:
 
 
     def distance(self, s, d):
-        if s == d: return 0
+        if s == d: 
+            return 0
         # ...
         return None
 
 
     def shortest_path(self, s, d):
-        if s == d: return [s,d]
+        if s == d: 
+            return [s,d]
         #...
         return None
 
@@ -136,7 +142,8 @@ class MyGraph:
         l = [(s,0)]
         while len(l) > 0:
             node, dist = l.pop(0)
-            if node != s: res.append((node,dist))
+            if node != s: 
+                res.append((node,dist))
             for elem in self.graph[node]:
                 if not is_in_tuple_list(l,elem) and not is_in_tuple_list(res,elem): 
                     l.append((elem,dist+1))
@@ -151,7 +158,8 @@ class MyGraph:
         while len(l) > 0:
             node = l.pop(0)
             for elem in self.graph[node]:
-                if elem == v: return True
+                if elem == v: 
+                    return True
                 elif elem not in visited:
                     l.append(elem)
                     visited.append(elem)
@@ -161,7 +169,8 @@ class MyGraph:
     def has_cycle(self):
         res = False
         for v in self.graph.keys():
-            if self.node_has_cycle(v): return True
+            if self.node_has_cycle(v): 
+                return True
         return res
 
 

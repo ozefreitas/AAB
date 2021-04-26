@@ -60,6 +60,28 @@ class MyGraphHeavy:
             self.graph[o].append((d,c))
 
 
+    def get_successors(self, v):
+        return list(self.graph[v])
+
+
+    def get_predecessors(self, v):
+        res = []
+        for key in self.graph.keys():
+            if v in self.graph[key]:
+                res.append(key)
+        return res
+
+
+    def get_adjacents(self, v):
+        s = self.get_successors(v)
+        p = self.get_predecessors(v)
+        res = []
+        res.extend(p)
+        for n in s:
+            if n not in res:
+                res.append(n)
+        return res
+
 def test1():
     gr = MyGraphHeavy ( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
     gr.print_graph()
