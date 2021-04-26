@@ -46,7 +46,7 @@ class EAMotifsInt(EvolAlgorithm):
 class EAMotifsReal(EvolAlgorithm):  # Herda todas as funções de EvolAlgorithm
 
     def __init__(self, popsize, numits, noffspring, filename):
-        self.motifs = MotifFinding()  # inicialização do metodo MotifFinding
+        self.motifs = MotifFinding()  # inicialização do classe MotifFinding
         self.motifs.readFile(filename, "dna")  # automaticamente guarda as sequencias
         # print(self.motifs.seqs)
         indsize = self.motifs.motifSize * len(self.motifs.alphabet)  # o tamanho dos individuos será um vetor do tamanho da pwm, ou seja, tamanho do motif (coluans) * tamanho do alfabeto (linhas)
@@ -135,7 +135,7 @@ def test2():
     ea = EAMotifsReal(100, 200, 50, "C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
-    print(ea.motifs.pwm)
+    printMat(ea.motifs.pwm)
 
 #test1()
 test2()
