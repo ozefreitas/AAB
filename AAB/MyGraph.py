@@ -126,14 +126,33 @@ class MyGraph:
     def distance(self, s, d):
         if s == d: 
             return 0
-        # ...
-        return None
+        l = [(s,0)]  # lista de tuplos, que guarda um nó e distância percorrida (em numero de nós) num determinado momento
+        visited = [s]  # lista que guarda os nós que já foram visitados
+        while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
+            node, dist = l.pop(0)  # node passa a ser o primeiro elemento do tuplo guardado em l, e dist o segundo, ao mesmo tempo que esse tuplo é apagado e l fica vazia
+            # print (node, dist)
+            for elem in self.graph[node]:  # vai buscar os nós que estão na lista do value correspondente ao node que está guardado
+                if elem == d:  # se o elemento a que chegou for o parameterizado 
+                    return dist + 1  # então damos return à distancia que está guardada + 1
+                elif elem not in visited:  # caso nao se encontre o nó
+                    l.append((elem,dist+1))  # voltamos a adicionar a l (que estava vazia) esse mesmo elemento, assim como a distância que foi percorrida, que será sempre iterações de +1 com cada iteração do ciclo
+                    visited.append(elem)  # adiciona-se a viseted esse nó
+        return None  
 
 
-    def shortest_path(self, s, d):
+    def shortest_path(self, s, d):  # igual à distance, mas retorna os nos por onde passa
         if s == d: 
             return [s,d]
-        #...
+        l = [(s,[])]
+        visited = [s]
+        while len(l) > 0:
+            node, preds = l.pop(0)
+            for elem in self.graph[node]:
+                if elem == d: 
+                    return preds+[node,elem]
+                elif elem not in visited:
+                    l.append((elem,preds+[node]))
+                    visited.append(elem)
         return None
 
 
@@ -149,8 +168,8 @@ class MyGraph:
                     l.append((elem,dist+1))
         return res
 
-
 ## cycles
+
     def node_has_cycle (self, v):
         l = [v]
         res = False
@@ -158,7 +177,7 @@ class MyGraph:
         while len(l) > 0:
             node = l.pop(0)
             for elem in self.graph[node]:
-                if elem == v: 
+                if elem == v:  # se o vertice fornecido voltar a ser verificado com o correr do grafo, então quer dizer que há um ciclo
                     return True
                 elif elem not in visited:
                     l.append(elem)
@@ -166,15 +185,15 @@ class MyGraph:
         return res
 
 
-    def has_cycle(self):
+    def has_cycle(self):  # verifica se o grafo é ciclico ou aciclico
         res = False
-        for v in self.graph.keys():
-            if self.node_has_cycle(v): 
+        for v in self.graph.keys():  # para todos os nós do grafo
+            if self.node_has_cycle(v):  # corre a função 
                 return True
         return res
 
 
-def is_in_tuple_list (tl, val):
+def is_in_tuple_list (tl, val):  # verifica se um dado 
     res = False
     for (x,_) in tl:
         if val == x: 
@@ -220,25 +239,29 @@ def test3():
 def test4():
     gr = MyGraph( {1:[2], 2:[3], 3:[2,4], 4:[2]} )
     
-    print (gr.distance(1,4))
-    print (gr.distance(4,3))
+    gr.print_graph()
+
+    #print (gr.distance(1,4))
+    #print (gr.distance(4,3))
 
     print (gr.shortest_path(1,4))
     print (gr.shortest_path(4,3))
 
-    print (gr.reachable_with_dist(1))
-    print (gr.reachable_with_dist(3))
+    #print (gr.reachable_with_dist(1))
+    #print (gr.reachable_with_dist(3))
 
     gr2 = MyGraph( {1:[2,3], 2:[4], 3:[5], 4:[], 5:[]} )
-    
-    print (gr2.distance(2,1))
-    print (gr2.distance(1,5))
-    
-    print (gr2.shortest_path(1,5))
-    print (gr2.shortest_path(2,1))
 
-    print (gr2.reachable_with_dist(1))
-    print (gr2.reachable_with_dist(5))
+    gr2.print_graph()
+    
+    #print (gr2.distance(2,1))
+    #print (gr2.distance(1,5))
+    
+    #print (gr2.shortest_path(1,5))
+    #print (gr2.shortest_path(2,1))
+
+    #print (gr2.reachable_with_dist(1))
+    #print (gr2.reachable_with_dist(5))
 
 
 def test5():
