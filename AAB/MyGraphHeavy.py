@@ -15,7 +15,8 @@ class MyGraphHeavy:
         ''' Prints the conten of the draph in a more frendly way '''
         for v in self.graph.keys():
             for d in self.graph[v]:
-                print (v, " -> ", d[0], "with a cost of:", d[1])
+                no, custo = d
+                print (v, " -> ", no, "with a cost of:", custo)
 
 
     def get_nodes(self):
@@ -76,7 +77,7 @@ class MyGraphHeavy:
             for no in self.graph[key]:  # para cada elemento (que é um tuplo de dois) da lista que corresponde ao value da key em causa no ciclo
                 dest.append(no[0])  # vai adicionar a lista des o primeiro elemento de cada um desses tuplos (que corresponde ao vertice de destino)
             if v in dest:  # se v estiver presente nessa lista
-                res.append(key)  # então será um predecessor
+                res.append(key)  # então o nó de origem que é a key em cada ciclo será um predecessor
         return res
 
 
@@ -102,6 +103,35 @@ class MyGraphHeavy:
 
     def degree(self, v):
         return len(self.get_adjacents(v)) 
+
+    ## BFS and DFS searches    
+
+    def reachable_bfs(self, v):
+        l = [v]
+        res = []
+        while len(l) > 0:
+            node = l.pop(0)
+            for elem in self.graph[node]:
+                if elem[0] != v: 
+                    res.append(elem[0])
+                if elem[0] not in res and elem[0] not in l and elem[0] != node:
+                    l.append(elem[0])
+        return res
+
+
+    def reachable_dfs(self, v):
+        l = [v]
+        res = []
+        while len(l) > 0:
+            node = l.pop(0)
+            for elem in self.graph[node]:
+                if elem[0] != v: 
+                    res.append(elem[0])
+                s = 0
+                if elem[0] not in res and elem[0] not in l:
+                    l.insert(s, elem[0])
+                    s += 1
+            return res
 
 
     def distance(self, s, d): 
@@ -132,14 +162,62 @@ class MyGraphHeavy:
         visited = [s]  # lista que vai guardar se um vertice ja foi visitado
         while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
             node, preds, score = l.pop(0)  # cada elemento do tuplo vai ser atribuido a uma variável ao mesmo tempoq que l fica vazia
+            bestscore = 100000000000  # um valor muito alto para o score ser mais baixo
             for elem in self.graph[node]:  # ciclo para correr todos os tuplos que a lista tinha
                 if elem[0] == d:  # se o primeiro elemento desse tuplo, que é o nó destino, for igual ao d especificado, encontramos o vertice
                     return preds+[node, elem[0]], score + elem[1]  # e da-se return ao caminho que está gravado e o respetivo score acumulado
-                elif elem not in visited:  # se esse no não for igual e se ainda nao tiver sido visitdado
-                    l.append((elem[0], preds + [node], score + elem[1]))  # dá-se append na lista l desse no, do caminho até ao momento, e do score ate ao momento
-                    visited.append(elem)  # adiciona-se esse no a lista dos nos visitados
+                if elem[1] < bestscore:  # sempre que o score for mais baixo que o anterior
+                    bestscore = elem[1]  # atualiza-se o melhor score 
+                    newnode = elem[0]  # e o nó destino que tem esse custo no seu ramo
+            if newnode not in visited:  # se esse no não for igual e se ainda nao tiver sido visitdado
+                l.append((newnode, preds + [node], score + bestscore))  # dá-se append na lista l desse no, do caminho até ao momento, e do score ate ao momento
+                visited.append(newnode)  # adiciona-se esse no a lista dos nos visitados
         return None
 
+
+    def reachable_with_dist(self, s):
+        res = []
+        l = [(s, 0)]
+        while len(l) > 0:
+            node, score = l.pop(0)
+            if node != s: 
+                res.append((node, score))
+            for elem in self.graph[node]:
+                if not is_in_tuple_list(l, elem[0]) and not is_in_tuple_list(res, elem[0]): 
+                    l.append((elem[0], score + elem[1]))
+        return res
+    
+    ## cycles
+
+    def node_has_cycle (self, v):  # verifica se um no esta contido dentro de um ciclo, ou seja, se volta a ocorrer 
+        l = [v]
+        res = False
+        visited = [v]
+        while len(l) > 0:
+            node = l.pop(0)
+            for elem in self.graph[node]:
+                if elem[0] == v:  # se o vertice fornecido voltar a ser verificado com o correr do grafo, então quer dizer que há um ciclo
+                    return True
+                elif elem[0] not in visited:
+                    l.append(elem[0])
+                    visited.append(elem[0])
+        return res
+
+
+    def has_cycle(self):  # verifica se o grafo é ciclico ou aciclico
+        res = False
+        for v in self.graph.keys():  # para todos os nós do grafo
+            if self.node_has_cycle(v):  # corre a função 
+                return True
+        return res
+
+
+def is_in_tuple_list (tl, val):  # verifica se um valor está dentro da lista de tuplos
+    res = False
+    for (x,_) in tl:
+        if val == x: 
+            return True
+    return res
 
 def test1():
     gr = MyGraphHeavy ( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
@@ -199,8 +277,19 @@ def test4():
     #print (gr.reachable_with_dist(3))
 
 
+def test5():
+    gr = MyGraphHeavy( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
+    print (gr.node_has_cycle(2))
+    print (gr. node_has_cycle(1))
+    print (gr.has_cycle())
+
+    gr2 = MyGraphHeavy( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
+    print (gr2. node_has_cycle(1))
+    print (gr2.has_cycle())
+
 if __name__ == "__main__":
     #test1()
     #test2()
     #test3()
-    test4()
+    #test4()
+    test5()
