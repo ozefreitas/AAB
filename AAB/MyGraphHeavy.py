@@ -137,12 +137,11 @@ class MyGraphHeavy:
     def distance(self, s, d): 
         ''' entre s e d, retornar a distancia com menor peso, ou seja, a distancia para a qual a soma
         dos custos é a mais baixa '''
-        if s == d: 
+        if s == d:
             return 0
         l = [(s,0)]  # lista de tuplos, que guarda um nó e o custo
         visited = [s]  # lista que guarda os nós que já foram visitados
-        score = 0
-        while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
+        while len(l) > 0:  # o ciclo irá parar assim que l não volte a ser preenchida e passar a ter uma len de 0
             node, score = l.pop(0)  # node passa a ser o primeiro elemento do tuplo guardado em l, e dist o segundo, ao mesmo tempo que esse tuplo é apagado e l fica vazia
             for elem in self.graph[node]:  # vai a lista que contém os tuplos de dois elementos com (no destino, custo)
                 if elem[0] == d:  # se o elemento a que chegou for o parameterizado 
@@ -162,7 +161,7 @@ class MyGraphHeavy:
         visited = [s]  # lista que vai guardar se um vertice ja foi visitado
         while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
             node, preds, score = l.pop(0)  # cada elemento do tuplo vai ser atribuido a uma variável ao mesmo tempoq que l fica vazia
-            bestscore = 100000000000  # um valor muito alto para o score ser mais baixo
+            bestscore = 100000000000  # um valor muito alto para que o primeiro score a ser analisado seja sempre mais baixo
             for elem in self.graph[node]:  # ciclo para correr todos os tuplos que a lista tinha
                 if elem[0] == d:  # se o primeiro elemento desse tuplo, que é o nó destino, for igual ao d especificado, encontramos o vertice
                     return preds+[node, elem[0]], score + elem[1]  # e da-se return ao caminho que está gravado e o respetivo score acumulado
@@ -270,7 +269,7 @@ def test4():
     #print (gr.distance(4,3))
 
     #print (gr.shortest_path(1,2))
-    print (gr.shortest_path(1,4))
+    #print (gr.shortest_path(1,4))
     #print (gr.shortest_path(4,3))
 
     #print (gr.reachable_with_dist(1))
@@ -291,5 +290,5 @@ if __name__ == "__main__":
     #test1()
     #test2()
     #test3()
-    #test4()
-    test5()
+    test4()
+    #test5()
