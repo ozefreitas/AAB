@@ -170,7 +170,7 @@ class MyGraph:
 
 ## cycles
 
-    def node_has_cycle (self, v):
+    def node_has_cycle (self, v):  # verifica se um no esta contido dentro de um ciclo, ou seja, se volta a ocorrer 
         l = [v]
         res = False
         visited = [v]
@@ -193,7 +193,7 @@ class MyGraph:
         return res
 
 
-def is_in_tuple_list (tl, val):  # verifica se um dado 
+def is_in_tuple_list (tl, val):  # verifica se um valor está dentro da lista de tuplos
     res = False
     for (x,_) in tl:
         if val == x: 

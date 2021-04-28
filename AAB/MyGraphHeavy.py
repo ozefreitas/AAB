@@ -131,13 +131,13 @@ class MyGraphHeavy:
         l = [(s,[],0)]  # tuplo de 3 elementos (nó de partida s, lista de vertices até chegar ao vertive d, e custo acumulado 0 por default)
         visited = [s]  # lista que vai guardar se um vertice ja foi visitado
         while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
-            node, preds, score = l.pop(0)
-            for elem in self.graph[node]:
-                if elem[0] == d: 
-                    return preds+[node, elem[0]], score + elem[1]
-                elif elem not in visited:
-                    l.append((elem[0], preds + [node], score + elem[1]))
-                    visited.append(elem)
+            node, preds, score = l.pop(0)  # cada elemento do tuplo vai ser atribuido a uma variável ao mesmo tempoq que l fica vazia
+            for elem in self.graph[node]:  # ciclo para correr todos os tuplos que a lista tinha
+                if elem[0] == d:  # se o primeiro elemento desse tuplo, que é o nó destino, for igual ao d especificado, encontramos o vertice
+                    return preds+[node, elem[0]], score + elem[1]  # e da-se return ao caminho que está gravado e o respetivo score acumulado
+                elif elem not in visited:  # se esse no não for igual e se ainda nao tiver sido visitdado
+                    l.append((elem[0], preds + [node], score + elem[1]))  # dá-se append na lista l desse no, do caminho até ao momento, e do score ate ao momento
+                    visited.append(elem)  # adiciona-se esse no a lista dos nos visitados
         return None
 
 
