@@ -57,8 +57,8 @@ class MyGraphHeavy:
             self.add_vertex(o)
         if d not in self.graph.keys():
             self.add_vertex(d)
-        if d not in self.graph[o]:
-            self.graph[o].append((d,c))
+        if d not in self.graph[o]:  # se o vertice o ainda nao tiver o vertice destino d associado
+            self.graph[o].append((d,c))  # adiciona-se a lista o tuplo com esse vertice d e o custo associado de o para d
 
     ## successors, predecessors, adjacent nodes
 
