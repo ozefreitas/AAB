@@ -279,12 +279,9 @@ def test4():
 def test5():
     gr = MyGraphHeavy( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
     print (gr.node_has_cycle(2))
-    print (gr. node_has_cycle(1))
+    print (gr.node_has_cycle(1))
     print (gr.has_cycle())
 
-    gr2 = MyGraphHeavy( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
-    print (gr2. node_has_cycle(1))
-    print (gr2.has_cycle())
 
 if __name__ == "__main__":
     #test1()
