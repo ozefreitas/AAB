@@ -115,29 +115,28 @@ class MyGraphHeavy:
         while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
             node, score = l.pop(0)  # node passa a ser o primeiro elemento do tuplo guardado em l, e dist o segundo, ao mesmo tempo que esse tuplo é apagado e l fica vazia
             for elem in self.graph[node]:  # vai a lista que contém os tuplos de dois elementos com (no destino, custo)
-                for node, sc in elem:
-                    if node == d:  # se o elemento a que chegou for o parameterizado 
-                        return score + sc  # então damos return ao score 
-                    elif node not in visited:  # caso nao se encontre o nó
-                        l.append((node, score + sc))  # voltamos a adicionar a l (que estava vazia) esse mesmo elemento, assim como o custo acumulado em cada momento
-                        visited.append(node)  # adiciona-se a viseted esse nó
+                if elem[0] == d:  # se o elemento a que chegou for o parameterizado 
+                    return score + elem[1]  # então damos return ao score 
+                elif elem[0] not in visited:  # caso nao se encontre o nó
+                    l.append((elem[0], score + elem[1]))  # voltamos a adicionar a l (que estava vazia) esse mesmo elemento, assim como o custo acumulado em cada momento
+                    visited.append(elem[0])  # adiciona-se a viseted esse nó
         return None  
 
 
     def shortest_path(self, s, d):  # igual à distance, mas retorna os nos por onde passa
         ''' entre s e d, retornar o caminho com menor peso, ou seja, o caminho para o qual a soma
         dos custos é a mais baixa '''
-        if s == d: 
-            return [s,d]
-        l = [(s,[])]
-        visited = [s]
-        while len(l) > 0:
-            node, preds = l.pop(0)
+        if s == d:  # se forem dados dois vetices iguais, o custo será 0
+            return [s,d,0]
+        l = [(s,[],0)]  # tuplo de 3 elementos (nó de partida s, lista de vertices até chegar ao vertive d, e custo acumulado 0 por default)
+        visited = [s]  # lista que vai guardar se um vertice ja foi visitado
+        while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
+            node, preds, score = l.pop(0)
             for elem in self.graph[node]:
-                if elem == d: 
-                    return preds+[node,elem]
+                if elem[0] == d: 
+                    return preds+[node, elem[0]], score + elem[1]
                 elif elem not in visited:
-                    l.append((elem,preds+[node]))
+                    l.append((elem[0], preds + [node], score + elem[1]))
                     visited.append(elem)
         return None
 
@@ -150,6 +149,7 @@ def test1():
     gr.print_graph_w_costs()
     print (gr.get_nodes())
     print (gr.get_edges())
+
 
 def test2():
     gr2 = MyGraphHeavy()
@@ -169,6 +169,7 @@ def test2():
 
     gr2.print_graph_w_costs()
 
+
 def test3():
     gr = MyGraphHeavy( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
 
@@ -181,7 +182,25 @@ def test3():
     print (gr.out_degree(2))
     print (gr.degree(2))
 
+
+def test4():
+    gr = MyGraphHeavy( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
+    
+    gr.print_graph()
+
+    print (gr.distance(1,4))
+    #print (gr.distance(4,3))
+
+    #print (gr.shortest_path(1,2))
+    print (gr.shortest_path(1,4))
+    #print (gr.shortest_path(4,3))
+
+    #print (gr.reachable_with_dist(1))
+    #print (gr.reachable_with_dist(3))
+
+
 if __name__ == "__main__":
     #test1()
     #test2()
-    test3()
+    #test3()
+    test4()
