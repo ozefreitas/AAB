@@ -174,6 +174,29 @@ class MyGraphHeavy:
         return None
 
 
+    def shortest_path_alt(self, s, d):  # igual à distance, mas retorna os nos por onde passa
+        ''' entre s e d, retornar o caminho com menor peso, ou seja, o caminho para o qual a soma
+        dos custos é a mais baixa '''
+        if s == d:  # se forem dados dois vetices iguais, o custo será 0
+            return [s,d,0]
+        l = [(s,[],0)]  # tuplo de 3 elementos (nó de partida s, lista de vertices até chegar ao vertive d, e custo acumulado 0 por default)
+        visited = [s]  # lista que vai guardar se um vertice ja foi visitado
+        while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
+            node, preds, score = l.pop(0)  # cada elemento do tuplo vai ser atribuido a uma variável ao mesmo tempoq que l fica vazia
+            bestscore = 100000000000  # um valor muito alto para que o primeiro score a ser analisado seja sempre mais baixo
+            for elem in self.graph[node]:  # ciclo para correr todos os tuplos que a lista tinha
+                dest, cost = elem
+                if dest == d:  # se o primeiro elemento desse tuplo, que é o nó destino, for igual ao d especificado, encontramos o vertice
+                    return preds+[node, dest], score + cost  # e da-se return ao caminho que está gravado e o respetivo score acumulado
+                if cost < bestscore:  # sempre que o score for mais baixo que o anterior
+                    bestscore = cost  # atualiza-se o melhor score 
+                    newnode = dest  # e o nó destino que tem esse custo no seu ramo
+            if newnode not in visited:  # se esse no não for igual e se ainda nao tiver sido visitdado
+                l.append((newnode, preds + [node], score + bestscore))  # dá-se append na lista l desse no, do caminho até ao momento, e do score ate ao momento
+                visited.append(newnode)  # adiciona-se esse no a lista dos nos visitados
+        return None
+
+
     def reachable_with_dist(self, s):
         res = []
         l = [(s, 0)]
@@ -197,25 +220,25 @@ class MyGraphHeavy:
             for elem in self.graph[node]:
                 if elem[0] == v:  # se o vertice fornecido voltar a ser verificado com o correr do grafo, então quer dizer que há um ciclo
                     return True
-                elif elem[0] not in visited:
-                    l.append(elem[0])
-                    visited.append(elem[0])
+                elif elem[0] not in visited:  # se este no ainda nao tiver sido visitado 
+                    l.append(elem[0])  # adiciona-se a l esse nó
+                    visited.append(elem[0])  # e adiciona-se a lista de vertices visitados 
         return res
 
 
     def has_cycle(self):  # verifica se o grafo é ciclico ou aciclico
         res = False
         for v in self.graph.keys():  # para todos os nós do grafo
-            if self.node_has_cycle(v):  # corre a função 
-                return True
+            if self.node_has_cycle(v):  # corre a função, que retorna um binário, se for True, verifica-se e passa a condição
+                return True  # retornando True para o facto de que o grafo é ciclico
         return res
 
 
-def is_in_tuple_list (tl, val):  # verifica se um valor está dentro da lista de tuplos
+def is_in_tuple_list (tl, val):  # verifica se um valor está contido num tuplo
     res = False
-    for (x,_) in tl:
-        if val == x: 
-            return True
+    for (x,_) in tl:  # para os valores que estao no tuplo
+        if val == x:  # se o valor for igual ao primeiro elemento desse tuplo
+            return True  # entao verifica-se
     return res
 
 def test1():
@@ -271,7 +294,7 @@ def test4():
     #print (gr.shortest_path(1,2))
     #print (gr.shortest_path(1,4))
     #print (gr.shortest_path(4,3))
-
+    print (gr.shortest_path(1,4))
     #print (gr.reachable_with_dist(1))
     #print (gr.reachable_with_dist(3))
 

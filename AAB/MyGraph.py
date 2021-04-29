@@ -16,9 +16,7 @@ class MyGraph:
         for v in self.graph.keys():
             print (v, " -> ", self.graph[v])
 
-
     ## get basic info
-
 
     def get_nodes(self):
         ''' Returns list of nodes in the graph '''
@@ -126,7 +124,7 @@ class MyGraph:
     def distance(self, s, d):
         if s == d: 
             return 0
-        l = [(s,0)]  # lista de tuplos, que guarda um nó e distância percorrida (em numero de nós) num determinado momento
+        l = [(s, 0)]  # lista de tuplos, que guarda um nó e distância percorrida (em numero de nós) num determinado momento
         visited = [s]  # lista que guarda os nós que já foram visitados
         while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
             node, dist = l.pop(0)  # node passa a ser o primeiro elemento do tuplo guardado em l, e dist o segundo, ao mesmo tempo que esse tuplo é apagado e l fica vazia
@@ -135,7 +133,7 @@ class MyGraph:
                 if elem == d:  # se o elemento a que chegou for o parameterizado 
                     return dist + 1  # então damos return à distancia que está guardada + 1
                 elif elem not in visited:  # caso nao se encontre o nó
-                    l.append((elem,dist+1))  # voltamos a adicionar a l (que estava vazia) esse mesmo elemento, assim como a distância que foi percorrida, que será sempre iterações de +1 com cada iteração do ciclo
+                    l.append((elem, dist + 1))  # voltamos a adicionar a l (que estava vazia) esse mesmo elemento, assim como a distância que foi percorrida, que será sempre iterações de +1 com cada iteração do ciclo
                     visited.append(elem)  # adiciona-se a viseted esse nó
         return None  
 
@@ -143,29 +141,29 @@ class MyGraph:
     def shortest_path(self, s, d):  # igual à distance, mas retorna os nos por onde passa
         if s == d: 
             return [s,d]
-        l = [(s,[])]
+        l = [(s, [])]
         visited = [s]
         while len(l) > 0:
             node, preds = l.pop(0)
             for elem in self.graph[node]:
                 if elem == d: 
-                    return preds+[node,elem]
+                    return preds+[node, elem]
                 elif elem not in visited:
-                    l.append((elem,preds+[node]))
+                    l.append((elem, preds+[node]))
                     visited.append(elem)
         return None
 
 
     def reachable_with_dist(self, s):
         res = []
-        l = [(s,0)]
+        l = [(s, 0)]
         while len(l) > 0:
             node, dist = l.pop(0)
             if node != s: 
-                res.append((node,dist))
+                res.append((node, dist))
             for elem in self.graph[node]:
-                if not is_in_tuple_list(l,elem) and not is_in_tuple_list(res,elem): 
-                    l.append((elem,dist+1))
+                if not is_in_tuple_list(l, elem) and not is_in_tuple_list(res, elem): 
+                    l.append((elem, dist+1))
         return res
 
 ## cycles
