@@ -12,7 +12,7 @@ class MyGraphHeavy:
 
 
     def print_graph_w_costs(self):
-        ''' Prints the conten of the draph in a more frendly way '''
+        ''' Prints the conten of the draph in a more friendly way '''
         for v in self.graph.keys():
             for d in self.graph[v]:
                 no, custo = d
@@ -142,7 +142,7 @@ class MyGraphHeavy:
         l = [(s,0)]  # lista de tuplos, que guarda um nó e o custo
         visited = [s]  # lista que guarda os nós que já foram visitados
         while len(l) > 0:  # o ciclo irá parar assim que l não volte a ser preenchida e passar a ter uma len de 0
-            node, score = l.pop(0)  # node passa a ser o primeiro elemento do tuplo guardado em l, e dist o segundo, ao mesmo tempo que esse tuplo é apagado e l fica vazia
+            node, score = l.pop(0)  # node passa a ser o primeiro elemento do tuplo guardado em l, e score o segundo, ao mesmo tempo que esse tuplo é apagado e l fica vazia
             for elem in self.graph[node]:  # vai a lista que contém os tuplos de dois elementos com (no destino, custo)
                 if elem[0] == d:  # se o elemento a que chegou for o parameterizado 
                     return score + elem[1]  # então damos return ao score 
@@ -162,13 +162,13 @@ class MyGraphHeavy:
         while len(l) > 0:  # o ciclo irá parar assim que l não for preenchida e passar a ter uma len de 0
             node, preds, score = l.pop(0)  # cada elemento do tuplo vai ser atribuido a uma variável ao mesmo tempoq que l fica vazia
             bestscore = 100000000000  # um valor muito alto para que o primeiro score a ser analisado seja sempre mais baixo
-            for elem in self.graph[node]:  # ciclo para correr todos os tuplos que a lista tinha
+            for elem in self.graph[node]:  # ciclo para correr todos os tuplos que a lista tenha
                 if elem[0] == d:  # se o primeiro elemento desse tuplo, que é o nó destino, for igual ao d especificado, encontramos o vertice
                     return preds+[node, elem[0]], score + elem[1]  # e da-se return ao caminho que está gravado e o respetivo score acumulado
                 if elem[1] < bestscore:  # sempre que o score for mais baixo que o anterior
                     bestscore = elem[1]  # atualiza-se o melhor score 
                     newnode = elem[0]  # e o nó destino que tem esse custo no seu ramo
-            if newnode not in visited:  # se esse no não for igual e se ainda nao tiver sido visitdado
+            if newnode not in visited:  # se esse no ainda nao tiver sido visitdado
                 l.append((newnode, preds + [node], score + bestscore))  # dá-se append na lista l desse no, do caminho até ao momento, e do score ate ao momento
                 visited.append(newnode)  # adiciona-se esse no a lista dos nos visitados
         return None
@@ -191,7 +191,7 @@ class MyGraphHeavy:
                 if cost < bestscore:  # sempre que o score for mais baixo que o anterior
                     bestscore = cost  # atualiza-se o melhor score 
                     newnode = dest  # e o nó destino que tem esse custo no seu ramo
-            if newnode not in visited:  # se esse no não for igual e se ainda nao tiver sido visitdado
+            if newnode not in visited:  # se esse no ainda nao tiver sido visitdado
                 l.append((newnode, preds + [node], score + bestscore))  # dá-se append na lista l desse no, do caminho até ao momento, e do score ate ao momento
                 visited.append(newnode)  # adiciona-se esse no a lista dos nos visitados
         return None
@@ -240,6 +240,7 @@ def is_in_tuple_list (tl, val):  # verifica se um valor está contido num tuplo
         if val == x:  # se o valor for igual ao primeiro elemento desse tuplo
             return True  # entao verifica-se
     return res
+
 
 def test1():
     gr = MyGraphHeavy ( {1:[(2,12)], 2:[(3,12)], 3:[(2,4),(4,15)], 4:[(2,9)]} )
@@ -295,6 +296,7 @@ def test4():
     #print (gr.shortest_path(1,4))
     #print (gr.shortest_path(4,3))
     print (gr.shortest_path(1,4))
+    print (gr.shortest_path_alt(1,4))
     #print (gr.reachable_with_dist(1))
     #print (gr.reachable_with_dist(3))
 
