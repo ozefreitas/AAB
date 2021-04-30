@@ -71,7 +71,8 @@ class MyGraph:
         pred = self.get_predecessors(v)
         res = pred
         for p in suc: 
-            if p not in res: res.append(p)
+            if p not in res: 
+                res.append(p)
         return res
         
     ## degrees    
@@ -85,14 +86,15 @@ class MyGraph:
     def degree(self, v):
         return len(self.get_adjacents(v))
         
-    def all_degrees(self, deg_type = "inout"):
+    def all_degrees(self, deg_type = "inout"):  #
         ''' Computes the degree (of a given type) for all nodes.
         deg_type can be "in", "out", or "inout" '''
         degs = {}
         for v in self.graph.keys():
             if deg_type == "out" or deg_type == "inout":
                 degs[v] = len(self.graph[v])
-            else: degs[v] = 0
+            else: 
+                degs[v] = 0
         if deg_type == "in" or deg_type == "inout":
             for v in self.graph.keys():
                 for d in self.graph[v]:
@@ -112,8 +114,9 @@ class MyGraph:
     def mean_degree(self, deg_type = "inout"):
         degs = self.all_degrees(deg_type)
         return sum(degs.values()) / float(len(degs))
-        
-    def prob_degree(self, deg_type = "inout"):
+
+
+    def prob_degree(self, deg_type = "inout"):  # para cada, grau quanto nós tem
         degs = self.all_degrees(deg_type)
         res = {}
         for k in degs.keys():
@@ -124,7 +127,6 @@ class MyGraph:
         for k in res.keys():
             res[k] /= float(len(degs))
         return res    
-    
     
     ## BFS and DFS searches    
     
