@@ -129,7 +129,7 @@ class MyGraph:
         return res    
     
     ## BFS and DFS searches    
-    
+
     def reachable_bfs(self, v):
         l = [v]
         res = []
@@ -140,7 +140,8 @@ class MyGraph:
                 if elem not in res and elem not in l and elem != node:
                     l.append(elem)
         return res
-        
+
+
     def reachable_dfs(self, v):
         l = [v]
         res = []
@@ -153,7 +154,8 @@ class MyGraph:
                     l.insert(s, elem)
                     s += 1
         return res    
-    
+
+
     def distance(self, s, d):
         if s == d: return 0
         l = [(s,0)]
@@ -166,7 +168,8 @@ class MyGraph:
                     l.append((elem,dist+1))
                     visited.append(elem)
         return None
-        
+
+
     def shortest_path(self, s, d):
         if s == d: return 0
         l = [(s,[])]
@@ -179,7 +182,8 @@ class MyGraph:
                     l.append((elem,preds+[node]))
                     visited.append(elem)
         return None
-        
+
+
     def reachable_with_dist(self, s):
         res = []
         l = [(s,0)]
@@ -192,6 +196,7 @@ class MyGraph:
         return res
  
     ## mean distances ignoring unreachable nodes
+
     def mean_distances(self):
         tot = 0
         num_reachable = 0
@@ -203,15 +208,39 @@ class MyGraph:
         meandist = float(tot) / num_reachable
         n = len(self.get_nodes())
         return meandist, float(num_reachable)/((n-1)*n)  
-    
+
+
+    def degree_centrality(self, node):
+        deg = self.degree(node)
+        return deg
+
+
+    def highest_degree_cent(self, top = 10):
+        cc = {}
+        for k in self.graph.keys():
+            cc[k] = self.degree_centrality(k)
+        print(cc)
+        ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
+        return list(map(lambda x:x[0], ord_cl[:top]))
+        # score = {}
+        # for n in self.graph.keys():
+        #     score[n] = self.degree_centrality(n)
+        # ord = []
+        # for k, _ in score.items():
+        #     ord.append(k)
+        # return sorted(ord[:top])
+
+
     def closeness_centrality(self, node):
         dist = self.reachable_with_dist(node)
-        if len(dist)==0: return 0.0
+        if len(dist)==0: 
+            return 0.0
         s = 0.0
-        for d in dist: s += d[1]
+        for d in dist: 
+            s += d[1]
         return len(dist) / s
-        
-    
+
+
     def highest_closeness(self, top = 10): 
         cc = {}
         for k in self.graph.keys():
@@ -219,8 +248,8 @@ class MyGraph:
         print(cc)
         ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
         return list(map(lambda x:x[0], ord_cl[:top]))
-            
-    
+
+
     def betweenness_centrality(self, node):
         total_sp = 0
         sps_with_node = 0
@@ -230,11 +259,21 @@ class MyGraph:
                     sp = self.shortest_path(s, t)
                     if sp is not None:
                         total_sp += 1
-                        if node in sp: sps_with_node += 1 
+                        if node in sp: 
+                            sps_with_node += 1 
         return sps_with_node / total_sp
-                    
-    
-    ## cycles    
+
+
+    def highest_betweenness(self, top = 10):
+        cc = {}
+        for k in self.graph.keys():
+            cc[k] = self.betweenness_centrality(k)
+        print(cc)
+        ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
+        return list(map(lambda x:x[0], ord_cl[:top]))
+
+    ## cycles
+
     def node_has_cycle (self, v):
         l = [v]
         res = False
@@ -247,7 +286,8 @@ class MyGraph:
                     l.append(elem)
                     visited.append(elem)
         return res       
-    
+
+
     def has_cycle(self):
         res = False
         for v in self.graph.keys():
@@ -255,7 +295,7 @@ class MyGraph:
         return res
 
     ## clustering
-        
+
     def clustering_coef(self, v):
         adjs = self.get_adjacents(v)
         if len(adjs) <=1: return 0.0
@@ -266,17 +306,20 @@ class MyGraph:
                     if j in self.graph[i] or i in self.graph[j]: 
                         ligs = ligs + 1
         return float(ligs)/(len(adjs)*(len(adjs)-1))
-        
+
+
     def all_clustering_coefs(self):
         ccs = {}
         for k in self.graph.keys():
             ccs[k] = self.clustering_coef(k)
         return ccs
-        
+
+
     def mean_clustering_coef(self):
         ccs = self.all_clustering_coefs()
         return sum(ccs.values()) / float(len(ccs))
-            
+
+
     def mean_clustering_perdegree(self, deg_type = "inout"):
         degs = self.all_degrees(deg_type)
         ccs = self.all_clustering_coefs()
@@ -320,11 +363,20 @@ if __name__ == "__main__":
     print (gr.in_degree(2))
     print (gr.out_degree(2))
     print (gr.degree(2))
-    
+
+    print(gr.degree_centrality(2))
+    print(gr.highest_degree_cent())
+
     print(gr.all_degrees("inout"))
     print(gr.all_degrees("in"))
     print(gr.all_degrees("out"))
-    
+
+    print(gr.mean_degree())
+    print(gr.prob_degree())
+    print(gr.mean_distances())
+    print (gr.clustering_coef(1))
+    print (gr.clustering_coef(2))
+
     gr2 = MyGraph({1:[2,3,4], 2:[5,6],3:[6,8],4:[8],5:[7],6:[],7:[],8:[]})
     print(gr2.reachable_bfs(1))
     print(gr2.reachable_dfs(1))
@@ -341,8 +393,5 @@ if __name__ == "__main__":
     print(gr.has_cycle())
     print(gr2.has_cycle())
     
-    print(gr.mean_degree())
-    print(gr.prob_degree())
-    print(gr.mean_distances())
-    print (gr.clustering_coef(1))
-    print (gr.clustering_coef(2))
+
+

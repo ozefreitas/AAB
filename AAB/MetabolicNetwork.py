@@ -84,7 +84,8 @@ class MetabolicNetwork (MyGraph):  # tudo o que definimos no mygraph ficam dispo
             self.convert_metabolite_net(gmr)
         elif self.net_type == "reaction-reaction": 
             self.convert_reaction_graph(gmr)
-        else: self.graph = {}
+        else: 
+            self.graph = {}
         
         
     def convert_metabolite_net(self, gmr):  # fazer o grafo só de metabolitos
@@ -139,7 +140,7 @@ def test1():
     print("Reactions: ", m.get_nodes_type("reaction"))
     print("Metabolites: ", m.get_nodes_type("metabolite"))
 
-        
+
 def test2():
     print("metabolite-reaction network:")
     mrn = MetabolicNetwork("metabolite-reaction")
@@ -186,40 +187,42 @@ def test3():
     d = mrn.prob_degree("out")
     for x in sorted(d.keys()):
         print (x, "\t", d[x])
-    print(mrn.mean_distances())
-    print(mrn.all_clustering_coefs())
-    print(mrn.mean_clustering_perdegree())
+    #print(mrn.mean_distances())
+    #print(mrn.all_clustering_coefs())
+    #print(mrn.mean_clustering_perdegree())
 
-#    print("metabolite-metabolite network:")
-#    mmn = MetabolicNetwork("metabolite-metabolite")
-#    mmn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/ecoli.txt")
-#    mmn.print_graph()
-#    print()
-#    print (mmn.mean_degree("out"))
-#    d = mmn.prob_degree("out")
-#    for x in sorted(d.keys()):
-#        print (x, "\t", d[x])
 
-#    print("reaction-reaction network:")
-   #rrn = MetabolicNetwork("reaction-reaction")
-   #rrn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/ecoli.txt")
-   #rrn.print_graph()
-   #print()
-   #
-   #print("metabolite-reaction network (splitting reversible):")
-   #mrsn = MetabolicNetwork("metabolite-reaction", True)
-   #mrsn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/ecoli.txt")
-   #mrsn.print_graph()
-   #print()
-   #
-   #print("reaction-reaction network (splitting reversible):")
-   #rrsn = MetabolicNetwork("reaction-reaction", True)
-   #rrsn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/ecoli.txt")
-   #rrsn.print_graph()
-   #print()
+def test4():
+    print("metabolite-reaction network:")
+    mrn = MetabolicNetwork("metabolite-reaction")
+    mrn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/example-net.txt")
+    mrn.print_graph()
+    print(mrn.highest_degree_cent())
+    print(mrn.highest_closeness())
+    print(mrn.highest_betweenness())
+    print()
+    
+    print("metabolite-metabolite network:")
+    mmn = MetabolicNetwork("metabolite-metabolite")
+    mmn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/example-net.txt")
+    mmn.print_graph()
+    print(mmn.highest_degree_cent())
+    print(mmn.highest_closeness())
+    print(mmn.highest_betweenness())
+    print()
+    
+    print("reaction-reaction network:")
+    rrn = MetabolicNetwork("reaction-reaction")
+    rrn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/example-net.txt")
+    rrn.print_graph()
+    print(rrn.highest_degree_cent())
+    print(rrn.highest_closeness())
+    print(rrn.highest_betweenness())
+    print()
 
 
 # test1()
 # print()
 # test2()
-test3()
+# test3()
+# test4()
