@@ -90,23 +90,25 @@ class MyGraph:
         ''' Computes the degree (of a given type) for all nodes.
         deg_type can be "in", "out", or "inout" '''
         degs = {}
-        for v in self.graph.keys():
-            if deg_type == "out" or deg_type == "inout":
-                degs[v] = len(self.graph[v])
+        for v in self.graph.keys():  # para cada no do grafo
+            if deg_type == "out" or deg_type == "inout":  # para contabilizar os out degrees
+                degs[v] = len(self.graph[v])  # vasta contar o numero de elementos que esta no value correspondente a esse no
             else: 
                 degs[v] = 0
-        if deg_type == "in" or deg_type == "inout":
-            for v in self.graph.keys():
-                for d in self.graph[v]:
-                    if deg_type == "in" or v not in self.graph[d]:
-                        degs[d] = degs[d] + 1
+        if deg_type == "in" or deg_type == "inout":  # para os in degrees
+            for v in self.graph.keys():  # para todos os nos do grafo
+                for d in self.graph[v]:  # e para cada elemento dos values de cada nó
+                    if deg_type == "in" or v not in self.graph[d]:  # se estivermos a procura dos in
+                        # ou se esse no nao for um value (sucessor) de d
+                        degs[d] = degs[d] + 1  # adicionamos 1 ao grau de d
         return degs
     
     def highest_degrees(self, all_deg= None, deg_type = "inout", top= 10):
-        if all_deg is None: 
-            all_deg = self.all_degrees(deg_type)
-        ord_deg = sorted(list(all_deg.items()), key=lambda x : x[1], reverse = True)
-        return list(map(lambda x:x[0], ord_deg[:top]))
+        ''' retorna uma lista ordenada de acordo com o segundo elemento do dicionário'''
+        if all_deg is None:   # se all_deg nao for fornecido,
+            all_deg = self.all_degrees(deg_type)  # corremos a função que devolve todos os graus de todos os nós
+        ord_deg = sorted(list(all_deg.items()), key=lambda x : x[1], reverse = True)  # vai ordenar o dicionário de acordo com o segundo elemento (values)
+        return list(map(lambda x:x[0], ord_deg[:top]))  # retorna uma lista com o top 10 dos maiores graus e nós correspondentes
         
     
     ## topological metrics over degrees
@@ -171,13 +173,15 @@ class MyGraph:
 
 
     def shortest_path(self, s, d):
-        if s == d: return 0
+        if s == d: 
+            return 0
         l = [(s,[])]
         visited = [s]
         while len(l) > 0:
             node, preds = l.pop(0)
             for elem in self.graph[node]:
-                if elem == d: return preds+[node,elem]
+                if elem == d: 
+                    return preds+[node,elem]
                 elif elem not in visited: 
                     l.append((elem,preds+[node]))
                     visited.append(elem)
@@ -189,11 +193,12 @@ class MyGraph:
         l = [(s,0)]
         while len(l) > 0:
             node, dist = l.pop(0)
-            if node != s: res.append((node,dist))
-            for elem in self.graph[node]:
-                if not is_in_tuple_list(l,elem) and not is_in_tuple_list(res,elem): 
-                    l.append((elem,dist+1))
-        return res
+            if node != s: 
+                res.append((node,dist))
+            for elem in self.graph[node]:  # os sucessores de s
+                if not is_in_tuple_list(l,elem) and not is_in_tuple_list(res,elem):  # se esses nos nao fizerem parte nem de res nem de l
+                    l.append((elem,dist+1))  # l recebe esse elemento, assim como a distancia a ele
+        return res  # retorn res a partir do momento que l nao for preenchida
  
     ## mean distances ignoring unreachable nodes
 
@@ -210,40 +215,21 @@ class MyGraph:
         return meandist, float(num_reachable)/((n-1)*n)  
 
 
-    def degree_centrality(self, node):
-        deg = self.degree(node)
-        return deg
-
-
-    def highest_degree_cent(self, top = 10):
-        cc = {}
-        for k in self.graph.keys():
-            cc[k] = self.degree_centrality(k)
-        print(cc)
-        ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
-        return list(map(lambda x:x[0], ord_cl[:top]))
-        # score = {}
-        # for n in self.graph.keys():
-        #     score[n] = self.degree_centrality(n)
-        # ord = []
-        # for k, _ in score.items():
-        #     ord.append(k)
-        # return sorted(ord[:top])
-
-
     def closeness_centrality(self, node):
-        dist = self.reachable_with_dist(node)
-        if len(dist)==0: 
+        dist = self.reachable_with_dist(node)  # a quantos nos podemos chegar a partir de node
+        if len(dist)==0: # se nao der para nenhum retorna 0
             return 0.0
-        s = 0.0
-        for d in dist: 
-            s += d[1]
-        return len(dist) / s
+        s = 0.0  # distancia total
+        for d in dist:  # para cada tuplo de dist (elem, distancia)
+            s += d[1]  # soma todas as distancias
+        return len(dist) / s  # numero de nos/distancia total
 
 
-    def highest_closeness(self, top = 10): 
+    def highest_closeness(self, top = 10):
+        ''' retorna uma lista ordenada de acordo com o segundo elemento do dicionário'''
         cc = {}
         for k in self.graph.keys():
+            # print(k)
             cc[k] = self.closeness_centrality(k)
         print(cc)
         ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
@@ -251,20 +237,22 @@ class MyGraph:
 
 
     def betweenness_centrality(self, node):
-        total_sp = 0
-        sps_with_node = 0
-        for s in self.graph.keys(): 
-            for t in self.graph.keys(): 
-                if s != t and s != node and t != node:
-                    sp = self.shortest_path(s, t)
-                    if sp is not None:
-                        total_sp += 1
-                        if node in sp: 
-                            sps_with_node += 1 
-        return sps_with_node / total_sp
+        total_sp = 0  # numero total de caminhos mais curtos
+        sps_with_node = 0  # numero total de caminhos mais curtos que contem node
+        for s in self.graph.keys():  # para todos os nós
+            for t in self.graph.keys():  # para todos os nós
+                if s != t and s != node and t != node:  # so quando o no do primeiro ciclo for diferente do segundo
+                    # o no do primeiro e do segundo sejam diferentes de node
+                    sp = self.shortest_path(s, t)  # retorna o caminho entre s e t
+                    if sp is not None:  # se um caminho foi encontrada
+                        total_sp += 1  # diz-se que se encontrou mais um
+                        if node in sp:  # e se node fizer parte dessa lista
+                            sps_with_node += 1  # diz-se que se encontrou mais um caminho que contem esse no
+        return sps_with_node / total_sp  # retorn o numero de caminhos com o node/numero total de caminhos
 
 
     def highest_betweenness(self, top = 10):
+        ''' retorna uma lista ordenada de acordo com o segundo elemento do dicionário (values)'''
         cc = {}
         for k in self.graph.keys():
             cc[k] = self.betweenness_centrality(k)
@@ -338,7 +326,8 @@ class MyGraph:
 def is_in_tuple_list(tl, val):
     res = False
     for (x,_) in tl:
-        if val == x: return True
+        if val == x: 
+            return True
     return res
 
     

@@ -183,7 +183,7 @@ def test3():
     print("Reactions: ", mrn.get_nodes_type("reaction") )
     print("Metabolites: ", mrn.get_nodes_type("metabolite") )
     print()
-    print (mrn.mean_degree("out"))
+    print (mrn.mean_degree("out"))  #media dos graus dos nos do grafo
     d = mrn.prob_degree("out")
     for x in sorted(d.keys()):
         print (x, "\t", d[x])
@@ -197,7 +197,7 @@ def test4():
     mrn = MetabolicNetwork("metabolite-reaction")
     mrn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/example-net.txt")
     mrn.print_graph()
-    print(mrn.highest_degree_cent())
+    print(mrn.highest_degrees())
     print(mrn.highest_closeness())
     print(mrn.highest_betweenness())
     print()
@@ -206,7 +206,7 @@ def test4():
     mmn = MetabolicNetwork("metabolite-metabolite")
     mmn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/example-net.txt")
     mmn.print_graph()
-    print(mmn.highest_degree_cent())
+    print(mmn.highest_degrees())
     print(mmn.highest_closeness())
     print(mmn.highest_betweenness())
     print()
@@ -215,10 +215,28 @@ def test4():
     rrn = MetabolicNetwork("reaction-reaction")
     rrn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/example-net.txt")
     rrn.print_graph()
-    print(rrn.highest_degree_cent())
+    print(rrn.highest_degrees())
     print(rrn.highest_closeness())
     print(rrn.highest_betweenness())
     print()
+
+
+def test5():
+    print("metabolite-reaction network:")
+    mrn = MetabolicNetwork("metabolite-reaction")
+    mrn.load_from_file("C:/Users/Zé Freitas/Desktop/Mestrado/2ºSemestre/Algoritmos Avancados/Portfolio/AAB/AAB/ecoli.txt")
+    mrn.print_graph()
+    print("Reactions: ", mrn.get_nodes_type("reaction") )
+    print("Metabolites: ", mrn.get_nodes_type("metabolite") )
+    print()
+    print (mrn.mean_degree("out"))  #media dos graus dos nos do grafo
+    d = mrn.prob_degree("out")
+    for x in sorted(d.keys()):
+        print (x, "\t", d[x])
+    print("Highest degrees:", mrn.highest_degrees())  # M_h_c
+    print(mrn.closeness_centrality("M_atp_c"))
+    print("Highest closeness:", mrn.highest_closeness())  # R_UDPGALM
+    print("Highest betweeness:", mrn.highest_betweenness())  # 
 
 
 # test1()
@@ -226,3 +244,4 @@ def test4():
 # test2()
 # test3()
 # test4()
+test5()
