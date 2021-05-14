@@ -236,6 +236,7 @@ def test5():
     print("Highest degrees:", mrn.highest_degrees())  # M_h_c
     print(mrn.closeness_centrality("M_atp_c"))
     print("Highest closeness:", mrn.highest_closeness())  # R_UDPGALM
+    print(mrn.betweenness_centrality("M_atp_c"))
     print("Highest betweeness:", mrn.highest_betweenness())  # 
 
 

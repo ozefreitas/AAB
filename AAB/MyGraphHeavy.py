@@ -234,7 +234,7 @@ class MyGraphHeavy:
         return res
 
 
-def is_in_tuple_list (tl, val):  # verifica se um valor está contido num tuplo
+def is_in_tuple_list (tl, val):  # verifica se um valor está contido numa lista de tuplos
     res = False
     for (x,_) in tl:  # para os valores que estao no tuplo
         if val == x:  # se o valor for igual ao primeiro elemento desse tuplo

@@ -248,13 +248,14 @@ class MyGraph:
                         total_sp += 1  # diz-se que se encontrou mais um
                         if node in sp:  # e se node fizer parte dessa lista
                             sps_with_node += 1  # diz-se que se encontrou mais um caminho que contem esse no
-        return sps_with_node / total_sp  # retorn o numero de caminhos com o node/numero total de caminhos
+        return sps_with_node / total_sp  # retorn o numero de caminhos com o node/numero total de caminhos mais curtos
 
 
     def highest_betweenness(self, top = 10):
         ''' retorna uma lista ordenada de acordo com o segundo elemento do dicionário (values)'''
         cc = {}
         for k in self.graph.keys():
+            print(k)
             cc[k] = self.betweenness_centrality(k)
         print(cc)
         ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
