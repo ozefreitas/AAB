@@ -41,12 +41,12 @@ class MyGraph:
     ## add nodes and edges    
     
     def add_vertex(self, v):
-        ''' Add a vertex to the graph; tests if vertex exists not adding if it does '''
+        """ Add a vertex to the graph; tests if vertex exists not adding if it does """
         if v not in self.graph.keys():
             self.graph[v] = []
         
     def add_edge(self, o, d):
-        ''' Add edge to the graph; if vertices do not exist, they are added to the graph ''' 
+        """ Add edge to the graph; if vertices do not exist, they are added to the graph """
         if o not in self.graph.keys():
             self.add_vertex(o)
         if d not in self.graph.keys():
@@ -92,7 +92,7 @@ class MyGraph:
         degs = {}
         for v in self.graph.keys():  # para cada no do grafo
             if deg_type == "out" or deg_type == "inout":  # para contabilizar os out degrees
-                degs[v] = len(self.graph[v])  # vasta contar o numero de elementos que esta no value correspondente a esse no
+                degs[v] = len(self.graph[v])  # conta o numero de elementos que esta no value correspondente a esse no
             else: 
                 degs[v] = 0
         if deg_type == "in" or deg_type == "inout":  # para os in degrees
@@ -109,14 +109,12 @@ class MyGraph:
             all_deg = self.all_degrees(deg_type)  # corremos a função que devolve todos os graus de todos os nós
         ord_deg = sorted(list(all_deg.items()), key=lambda x : x[1], reverse = True)  # vai ordenar o dicionário de acordo com o segundo elemento (values)
         return list(map(lambda x:x[0], ord_deg[:top]))  # retorna uma lista com o top 10 dos maiores graus e nós correspondentes
-        
-    
+
     ## topological metrics over degrees
 
     def mean_degree(self, deg_type = "inout"):
         degs = self.all_degrees(deg_type)
         return sum(degs.values()) / float(len(degs))
-
 
     def prob_degree(self, deg_type = "inout"):  # para cada, grau quanto nós tem
         degs = self.all_degrees(deg_type)
@@ -143,7 +141,6 @@ class MyGraph:
                     l.append(elem)
         return res
 
-
     def reachable_dfs(self, v):
         l = [v]
         res = []
@@ -157,7 +154,6 @@ class MyGraph:
                     s += 1
         return res    
 
-
     def distance(self, s, d):
         if s == d: return 0
         l = [(s,0)]
@@ -170,7 +166,6 @@ class MyGraph:
                     l.append((elem,dist+1))
                     visited.append(elem)
         return None
-
 
     def shortest_path(self, s, d):
         if s == d: 
@@ -186,7 +181,6 @@ class MyGraph:
                     l.append((elem,preds+[node]))
                     visited.append(elem)
         return None
-
 
     def reachable_with_dist(self, s):
         res = []
@@ -212,8 +206,7 @@ class MyGraph:
             num_reachable += len(distsk)
         meandist = float(tot) / num_reachable
         n = len(self.get_nodes())
-        return meandist, float(num_reachable)/((n-1)*n)  
-
+        return meandist, float(num_reachable)/((n-1)*n)
 
     def closeness_centrality(self, node):
         dist = self.reachable_with_dist(node)  # a quantos nos podemos chegar a partir de node
@@ -224,7 +217,6 @@ class MyGraph:
             s += d[1]  # soma todas as distancias
         return len(dist) / s  # numero de nos/distancia total
 
-
     def highest_closeness(self, top = 10):
         ''' retorna uma lista ordenada de acordo com o segundo elemento do dicionário'''
         cc = {}
@@ -234,7 +226,6 @@ class MyGraph:
         print(cc)
         ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
         return list(map(lambda x:x[0], ord_cl[:top]))
-
 
     def betweenness_centrality(self, node):
         total_sp = 0  # numero total de caminhos mais curtos
