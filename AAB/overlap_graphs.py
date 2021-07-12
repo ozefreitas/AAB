@@ -4,12 +4,13 @@ from MyGraphFinal import MyGraph
 
 
 class OverlapGraph(MyGraph):
-    
-    def __init__(self, frags):
-        MyGraph.__init__(self, {})
-        self.create_overlap_graph(frags)
+
+    # def __init__(self, frags):
+     #   MyGraph.__init__(self, {})
+     #    self.create_overlap_graph(frags)
 
     def __init__(self, frags, reps=True):
+        MyGraph.__init__(self, {})
         if reps:
             self.create_overlap_graph_with_reps(frags)
         else:

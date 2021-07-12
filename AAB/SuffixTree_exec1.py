@@ -204,3 +204,13 @@ def test4():
 # 18 : 5
 # [0, 3]
 # None
+
+def check(self):
+    for node in self.root.keys():
+        for no in len(node, self.root.keys()[-1]):
+            if node in self.root[no][1].values():
+                return False
+            else:
+                continue
+
+

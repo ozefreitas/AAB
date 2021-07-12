@@ -86,8 +86,7 @@ class MetabolicNetwork (MyGraph):  # tudo o que definimos no mygraph ficam dispo
             self.convert_reaction_graph(gmr)
         else: 
             self.graph = {}
-        
-        
+
     def convert_metabolite_net(self, gmr):  # fazer o grafo só de metabolitos
         for m in gmr.node_types["metabolite"]:  # para cada metabolito que aparece
             self.add_vertex(m)  # adicona o nó 
@@ -99,7 +98,6 @@ class MetabolicNetwork (MyGraph):  # tudo o que definimos no mygraph ficam dispo
                         # podemos chegar a essa reação partindo de r, e por isso: 
                         self.add_edge(m,suc2)
 
-        
     def convert_reaction_graph(self, gmr):  # fazer o grafo so de reações
         for r in gmr.node_types["reaction"]:  # para cada reação
             self.add_vertex(r)  # adicona o nó 
@@ -183,13 +181,13 @@ def test3():
     print("Reactions: ", mrn.get_nodes_type("reaction") )
     print("Metabolites: ", mrn.get_nodes_type("metabolite") )
     print()
-    print (mrn.mean_degree("out"))  #media dos graus dos nos do grafo
+    print (mrn.mean_degree("out"))  # media dos graus dos nos do grafo
     d = mrn.prob_degree("out")
     for x in sorted(d.keys()):
         print (x, "\t", d[x])
-    #print(mrn.mean_distances())
-    #print(mrn.all_clustering_coefs())
-    #print(mrn.mean_clustering_perdegree())
+    # print(mrn.mean_distances())
+    # print(mrn.all_clustering_coefs())
+    # print(mrn.mean_clustering_perdegree())
 
 
 def test4():

@@ -21,9 +21,8 @@ class BWT:
 
     ######
     def print_matrix(self):
-         for c in self.matrix:
-             print(c)
-
+        for c in self.matrix:
+            print(c)
 
     def build_bwt(self, text, buildsufarray = False):
         m = self.get_full_matrix(text)  ######
@@ -36,7 +35,6 @@ class BWT:
                 stpos = m[i].index("$")  # em cada uma dessas sequencias vê em que indice aparece o simbolo "$"
                 self.sa.append(len(text)-stpos-1)  # e adiciona a posição a contar do fim da sequencia orifinal
         return res    
-
 
     def inverse_bwt(self):
         firstcol = self.get_first_col()
@@ -55,7 +53,6 @@ class BWT:
             res += nuc
             return res        
 
-
     def get_first_col (self):
         firstcol = []
         m = self.bwt
@@ -63,7 +60,6 @@ class BWT:
             firstcol.append(s)
         firstcol.sort()
         return firstcol
-
 
     def last_to_first(self):
         res = []
@@ -73,7 +69,6 @@ class BWT:
             occ = self.bwt[:x].count(nuc) + 1  # vai contar o numero de vezes qeu esse simbolo aparece até a posição do iterador
             res.append(find_ith_occ(fc, nuc, occ))  # vai ver em que indice aparece essa ocorrencia na primeira coluna
         return res
-
 
     def bw_matching(self, patt):
         lf = self.last_to_first()
@@ -98,7 +93,6 @@ class BWT:
                     res.append(i)
                 flag = False            
         return res        
-
 
     def bw_matching_pos(self, patt):
         res = []
@@ -135,13 +129,14 @@ def test2():
     bw.set_bwt("ACG$GTAAAAC")
     print (bw.inverse_bwt())
 
+
 def test3():
     seq = "TAGACAGAGA$"
     bw = BWT(seq, True)
     print("Suffix array:", bw.sa)
 #    print(bw.bw_matching_pos("AGA"))
 
-test()
-#test2()
-#test3()
 
+test()
+# test2()
+# test3()

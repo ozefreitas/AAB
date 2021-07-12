@@ -6,14 +6,12 @@ class Automata:
         self.transitionTable = {}
         self.buildTransitionTable(pattern)
 
-
     def buildTransitionTable(self, pattern):
         for q in range(self.numstates):  # toma os valores para o numero de estados
             for a in self.alphabet:  # toma os caracteres do alfabeto
                 prefix = pattern[:q] + a  # adiciona o caracter do alfabeto atribuido a "a" no final do prefixo
                 self.transitionTable[(q, a)] = self.overlap(prefix, pattern)  # para depois poder dizer qual é o estado seguinte
                 # adiciona ao dicionário uma chave em tuplo com o numero do estado atual e o simbolo seguinte, e value o estado para o qual se deve ir a seguir
-
 
     def printAutomata(self):
         print("States: ", self.numstates)
@@ -22,10 +20,8 @@ class Automata:
         for k in self.transitionTable.keys():
             print(k[0], ",", k[1], " -> ", self.transitionTable[k])
 
-
     def nextState(self, current, symbol):
         return self.transitionTable[(current, symbol)]  # vai buscar o valor que corresponde à chave no dicionário (que é um tuplo), e que diz qual o estado para o qual se deve ir a seguir
-
 
     def applySeq(self, seq):
         """
@@ -40,7 +36,6 @@ class Automata:
             q = self.nextState(q, c)  # O estado atual varia consoante o simbolo seguinte, e guarda em q
             res.append(q)
         return res
-
 
     def occurencesPattern(self, text):  # vai buscar os values correspondentes na tabela de transição
         """
@@ -57,7 +52,6 @@ class Automata:
             if q == self.numstates - 1:  # quando ve que chegou ao estado final, quer dizer que encontrou o padrao na sequencia e...
                 res.append(i - self.numstates + 2)  # vai adicionar o indice da sequencia onde o padrao começou
         return res
-
 
     def overlap(self, s1, s2):  # verifica se o prefixo é igual ao padrao até a posição final
         maxov = min(len(s1), len(s2))

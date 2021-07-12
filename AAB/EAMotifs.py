@@ -26,12 +26,10 @@ class EAMotifsInt(EvolAlgorithm):
         indsize = len(self.motifs)  # numero de sequencias a analisar, que será o numero de individuos
         EvolAlgorithm.__init__(self, popsize, numits, noffspring, indsize)
 
-
     def initPopul(self, indsize):
         maxvalue = self.motifs.seqSize(0) - self.motifs.motifSize  # a upper bound será o indice máximo que o vetor de posições iniciais pode tomar, ou seja, o tamanho da sequencia menos o tamanho do motif
         self.popul = PopulInt(self.popsize, indsize,
                               maxvalue, [])
-
 
     def evaluate(self, indivs):
         for i in range(len(indivs)):
@@ -53,13 +51,11 @@ class EAMotifsReal(EvolAlgorithm):  # Herda todas as funções de EvolAlgorithm
         # print(indsize)  que depois será usado para construir a propria pwm com a função vec_to_pwm
         EvolAlgorithm.__init__(self, popsize, numits, noffspring, indsize)
 
-
     def initPopul(self, indsize):  # override da função que está na classe EvolAlgorithm
         minvalue = 0
         maxvalue = self.motifs.seqSize(0) - self.motifs.motifSize  # a upper bound será o indice máximo que o vetor de posições iniciais pode tomar, ou seja, o tamanho da sequencia menos o tamanho do motif
         self.popul = PopulReal(self.popsize, indsize, minvalue,
                               maxvalue, [])  # faltava a lower bound
-
 
     def vec_to_pwm(self, v):  # v é o vetor de um "individuo", pelo que para tansformar numa pwm:
         tam_alfabeto = len(self.motifs.alphabet)
@@ -73,7 +69,6 @@ class EAMotifsReal(EvolAlgorithm):  # Herda todas as funções de EvolAlgorithm
                 pwm[j][col_idx] = col[j] / soma  # nessa coluna e para cada linha do tamanho do alfabeto, adicionar o valor correspondente
         return pwm  # e tem-se a pwm
 
-
     def probabSeq (self, seq):  # calcula a probablidade de uma sequencia individual de acordo com a pwm
         res = 1.0
         for i in range(self.motifs.motifSize):  # itera sobre as posições da sequencia (motif)
@@ -81,17 +76,15 @@ class EAMotifsReal(EvolAlgorithm):  # Herda todas as funções de EvolAlgorithm
             res *= self.motifs.pwm[lin][i]  # cada valor é multiplicado pelo anterior
         return res  # é a probabilidade da subsequencia fornecida ter sido gerada pelo perfil da pwm
 
-
     def mostProbableSeq(self, seq):  # recebe uma sequencia inteira
         maximo = -1.0
         maxind = -1
         for k in range(len(seq) - self.motifs.motifSize):  # faz a iteração num range que so vai até ao comprimento da sequencia menos o comprimento do motif
             p = self.probabSeq(seq[k : k + self.motifs.motifSize])  # faz a probabilidade de cada subsquencia ocorrer
-            if(p > maximo):  # devolve o maior valor de probabilidade
+            if p > maximo:  # devolve o maior valor de probabilidade
                 maximo = p
                 maxind = k
         return maxind
-
 
 #    def evaluate(self, indivs):
 #        for i in range(len(indivs)):  # para cada individuo
@@ -106,7 +99,6 @@ class EAMotifsReal(EvolAlgorithm):  # Herda todas as funções de EvolAlgorithm
 #            multifit = self.motifs.scoreMult(s, self.motifs.pwm)  # não queremos que a pwm seja atualizada ao fazer o score, por isso dá-mos como parametro a pwm que acabamos de criar atraves da função vec_to_pwm
 #            ind.setFitness(fit)  # associar esse socre ao individuo
 #            ind.setMultiFitness(multifit)
-
 
     def evaluate(self, indivs):
         for i in range(len(indivs)):  # para cada individuo
@@ -137,5 +129,6 @@ def test2():
     ea.printBestSolution()
     printMat(ea.motifs.pwm)
 
-#test1()
+
+# test1()
 test2()

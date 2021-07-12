@@ -9,10 +9,8 @@ class EvolAlgorithm:
         self.noffspring = noffspring
         self.indsize = indsize
 
-
     def initPopul(self, indsize):  # responsável pela geração da população incial
         self.popul = Popul(self.popsize, indsize)
-
 
     def evaluate(self, indivs):
         for i in range(len(indivs)):  # para cada individuo da populacao
@@ -23,7 +21,6 @@ class EvolAlgorithm:
                     fit += 1.0  # vai aumentar 1 valor ao seu score de aptidão
             ind.setFitness(fit)  # e atribui esse score ao individuo
         return None
-
 
     def iteration(self):
         parents = self.popul.selection(self.noffspring)  # parte da população que queremos manter
@@ -44,7 +41,6 @@ class EvolAlgorithm:
             if bs > self.bestsol:
                 self.bestsol = bs
             print("Iteration:", i, " ", "Best: ", self.bestsol)
-
 
     def printBestSolution(self):
         print("Best solution:", self.bestsol.getGenes())
