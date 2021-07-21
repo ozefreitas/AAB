@@ -115,9 +115,9 @@ class Enzyme:
 
     def __init__(self, iub):
         self.enzima = iub
-        self.iub = {"R": "[GA]", "Y": "[CT]", "M": "[AC]", "K": "[GT]",
-                    "S": "[GC]", "W": "[AT]", "B": "[CGT]", "D": "[GAT]",
-                    "H": "[CAT]", "V": "[GAC]", "N": "[GACT]"}
+        self.iub = {"R": ["G", "A"], "Y": ["C", "T"], "M": ["A", "C"], "K": ["G", "T"],
+                    "S": ["G", "C"], "W": ["A", "T"], "B": ["C", "G", "T"], "D": ["G", "A", "T"],
+                    "H": ["C", "A", "T"], "V": ["G", "A", "C"], "N": ["G", "A", "C", "T"]}
 
     def __len__(self):
         return len(self.enzima)
@@ -137,19 +137,41 @@ class Enzyme:
             if cod == "^":
                 regexp += cod
             elif cod in self.iub:
-                regexp += self.iub[cod]
+                regexp += "["+str("".join(self.iub[cod]))+"]"
             elif cod in ["A", "G", "T", "C"]:
                 regexp += cod
         return regexp
 
-    def cutPositions(self, enzyme, seq):
-        pass
+    def cutPositions(self, seq):
+        import re
+        regexp = self.iubToRE()
+        indice = regexp.index("^")
+        regexp = regexp.replace("^", "")
+        # res = re.search(regexp, seq)
+        res2 = re.findall(regexp, seq)
+        result = []
+        for i in res2:
+            result.append(seq.index(i))
+        # return res.group()
+        # return res.span()
+        return result
 
     def cutSubsequences(self, locs, seq):
-        pass
+        for i in locs:
+            if i >= len(seq):
+                return None
+        result = [seq[0:locs[0]]]
+        for i in range(len(locs)):
+            if locs[i] == locs[-1]:
+                result.append(seq[locs[i]:len(seq)])
+            else:
+                result.append(seq[locs[i]:locs[i+1]])
+        return result
 
 
 if __name__ == "__main__":
     X = Enzyme(iub="G^AMTV")
     print(X.__str__())
     print(X.iubToRE())
+    print(X.cutPositions(seq="GACTGTAGCTAGAATA"))
+    print(X.cutSubsequences([3, 8, 15], "GACTGTAGCTAGAATAATCGGATA"))
